@@ -6,7 +6,6 @@
 import * as usersAPI from './users-api';
 
 export async function signUp(userData) {
-  console.log(userData);
   try {
     const response = await usersAPI.signUp(userData);
 
