@@ -6,17 +6,44 @@
 import * as usersAPI from './users-api';
 
 export async function signUp(userData) {
-  const token = await usersAPI.signUp(userData);
-  localStorage.setItem('token', token);
-  return getUser();
+  console.log(userData);
+  try {
+    const response = await usersAPI.signUp(userData);
+
+    if (response.status === 200 && typeof response.data === "string") {
+      localStorage.setItem("token", response.data);
+      return getUser();
+    } else {
+      throw new Error("Token is not available or not a string");
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+      console.log("Sign Up failed: " + error.response.data);
+    } else {
+      console.log("Sign Up failed, please check your details and try again.")
+    }
+    throw error;
+  }
 }
 
 export async function login(credentials) {
-  // Delegate the AJAX request to the users-api.js
-  // module.
-  const token = await usersAPI.login(credentials);
-  localStorage.setItem('token', token);
-  return getUser();
+  try {
+    const response = await usersAPI.login(credentials);
+    if (response.status === 200 && typeof response.data === "string") {
+      localStorage.setItem("token", response.data);
+      return getUser();
+    } else {
+      throw new Error("Invalid token response");
+    }
+  } catch (error) {
+    console.error("Login failed:", error.response || error);
+    if (error.response && error.response.data) {
+      console.log("Login failed: " + error.response.data);
+    } else {
+      console.log("Login failed, please check your credentials and try again.")
+    }
+    throw error;
+  }
 }
 
 export function logOut() {
