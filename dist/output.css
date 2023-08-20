@@ -584,6 +584,10 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.grid {
+  display: grid;
+}
+
 .bg-sky-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(3 105 161 / var(--tw-bg-opacity));
