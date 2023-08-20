@@ -35,9 +35,6 @@ export default function ImageUpload() {
             };
           });
         },
-        headers: {
-          "Custom-Header": "value",
-        },
       })
       .then((res) => {
         setMessage("Upload successful");
