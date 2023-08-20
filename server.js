@@ -3,6 +3,7 @@ const path = require("path");
 const favicon = require("serve-favicon");
 const logger = require("morgan");
 const { uploadImage } = require("./config/uploadImage");
+const { deleteImage } = require("./config/deleteImage");
 const Image = require("./models/image");
 // Always require and configure near the top
 require("dotenv").config();

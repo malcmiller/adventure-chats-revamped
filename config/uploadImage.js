@@ -5,10 +5,10 @@ const { S3Client } = require("@aws-sdk/client-s3");
 
 // create s3 instance using S3Client
 // (this is how we create s3 instance in v3)
-const s3 = new S3Client();
+const s3Client = new S3Client();
 
 const s3Storage = multerS3({
-  s3: s3, // s3 instance
+  s3: s3Client, // s3 instance
   bucket: "adventur-chats", // change it as per your project requirement
   acl: "public-read", // storage access type
   metadata: (req, file, cb) => {
@@ -16,7 +16,7 @@ const s3Storage = multerS3({
   },
   key: (req, file, cb) => {
     const fileName =
-      Date.now() + "_" + file.fieldname + "_" + file.originalname;
+      "/postId/" + Date.now() + "_" + file.fieldname + "_" + file.originalname;
     cb(null, fileName);
   },
 });
