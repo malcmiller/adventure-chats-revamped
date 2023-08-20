@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import * as usersService from "../../utilities/users-service";
 import axios from "axios";
 
@@ -34,7 +34,6 @@ export default function LoginForm({ setUser }) {
     percentageComplete: 0,
   });
   const [message, setMessage] = useState();
-  const [image, setImage] = useState();
 
   function handleUpload() {
     if (!files) {
