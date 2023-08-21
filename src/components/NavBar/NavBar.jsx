@@ -60,24 +60,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar({ user, setUser }) {
-  // function handleLogOut() {
-  //   userService.logOut();
-  //   setUser(null);
-  // }
-
-  // return (
-  //   <nav>
-  //     <Link to="/orders">Order History</Link>
-  //     &nbsp; | &nbsp;
-  //     <Link to="/orders/new">New Order</Link>
-  //     &nbsp;&nbsp;
-  //     <span>Welcome, {user.name}</span>
-  //     &nbsp;&nbsp;
-  //     <Link to="" onClick={handleLogOut}>
-  //       Log Out
-  //     </Link>
-  //   </nav>
-  // );
+  function handleLogOut() {
+    userService.logOut();
+    setUser(null);
+  }
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -109,7 +95,7 @@ export default function NavBar({ user, setUser }) {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={handleLogOut}>Logout</MenuItem>
     </Menu>
   );
 
@@ -117,32 +103,6 @@ export default function NavBar({ user, setUser }) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar color="transparent" elevation={0}>
         <Toolbar>
-          {/* <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton> */}
-          {/* <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography> */}
           <Link to="/">
             <Box
               component="img"
@@ -193,7 +153,7 @@ export default function NavBar({ user, setUser }) {
                 aria-haspopup="true"
                 onClick={handleProfileMenuOpen}
               >
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={user.name} src={user.profilePic} />
               </IconButton>
             </Tooltip>
             {/* <IconButton
