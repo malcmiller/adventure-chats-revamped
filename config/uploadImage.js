@@ -16,7 +16,13 @@ const s3Storage = multerS3({
   },
   key: (req, file, cb) => {
     const fileName =
-      "postId/" + Date.now() + "_" + file.fieldname + "_" + file.originalname;
+      req.params.postId +
+      "/" +
+      Date.now() +
+      "_" +
+      file.fieldname +
+      "_" +
+      file.originalname;
     cb(null, fileName);
   },
 });

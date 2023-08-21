@@ -26,7 +26,7 @@ export default function ImageUpload() {
       return { ...prevState, started: true };
     });
     axios
-      .post("http://localhost:3000/upload", formData, {
+      .post("/api/images/upload", formData, {
         onUploadProgress: (progressEvent) => {
           setProgress((prevState) => {
             return {

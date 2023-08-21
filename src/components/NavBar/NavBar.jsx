@@ -5,6 +5,7 @@ import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -14,13 +15,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import AdbIcon from "@mui/icons-material/Adb";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,7 +54,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "20ch",
+      width: "75ch",
     },
   },
 }));
@@ -82,31 +79,15 @@ export default function NavBar({ user, setUser }) {
   //   </nav>
   // );
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const menuId = "primary-search-account-menu";
@@ -128,58 +109,7 @@ export default function NavBar({ user, setUser }) {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <ChatBubbleOutlineIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </Menu>
   );
 
@@ -217,14 +147,14 @@ export default function NavBar({ user, setUser }) {
             <Box
               component="img"
               sx={{
-                height: 100,
+                height: "7rem",
                 p: 1,
               }}
-              alt="Your logo."
+              alt="ADVENTUR"
               src={Logo}
             />
           </Link>
-          <Search>
+          <Search sx={{ textAlign: "left", flexGrow: 1 }}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -233,15 +163,16 @@ export default function NavBar({ user, setUser }) {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Stack direction="row">
             <IconButton
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
             >
               <Badge badgeContent={4} color="error">
-                <ChatBubbleOutlineIcon />
+                <Avatar>
+                  <ChatBubbleOutlineIcon sx={{ color: "#303841" }} />
+                </Avatar>
               </Badge>
             </IconButton>
             <IconButton
@@ -250,10 +181,22 @@ export default function NavBar({ user, setUser }) {
               color="inherit"
             >
               <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+                <Avatar>
+                  <NotificationsIcon sx={{ color: "#303841" }} />
+                </Avatar>
               </Badge>
             </IconButton>
-            <IconButton
+            <Tooltip title="Open settings">
+              <IconButton
+                edge="end"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+              >
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+            {/* <IconButton
               size="large"
               edge="end"
               aria-label="account of current user"
@@ -263,23 +206,10 @@ export default function NavBar({ user, setUser }) {
               color="inherit"
             >
               <AccountCircle />
-            </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
+            </IconButton> */}
+          </Stack>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
       {renderMenu}
     </Box>
   );
