@@ -16,7 +16,7 @@ const commentSchema = new Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 const postSchema = new Schema(
@@ -46,10 +46,16 @@ const postSchema = new Schema(
       required: true,
     },
     comments: [commentSchema],
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 module.exports = mongoose.model("Post", postSchema);
