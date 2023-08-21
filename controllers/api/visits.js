@@ -2,10 +2,10 @@ const Visit = require('../../models/visit');
 
 module.exports = {
   index,
-  create,
-  show,
-  update,
-  delete: deleteOne,
+  createVisit,
+  showVisit,
+  updateVisit,
+  deleteVisit,
 };
 
 async function index(req, res) {
@@ -13,18 +13,18 @@ async function index(req, res) {
   res.json(visits);
 }
 
-async function create(req, res) {
+async function createVisit(req, res) {
   req.body.user = req.user._id;
   const visit = await Visit.create(req.body);
   res.status(201).json(visit);
 }
 
-async function show(req, res) {
+async function showVisit(req, res) {
   const visit = await Visit.findById(req.params.id);
   res.json(visit);
 }
 
-async function update(req, res) {
+async function updateVisit(req, res) {
   const updatedVisit = await Visit.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -35,7 +35,7 @@ async function update(req, res) {
   res.status(200).json(updatedVisit);
 }
 
-async function deleteOne(req, res) {
+async function deleteVisit(req, res) {
   const deletedVisit = await Visit.findByIdAndRemove(req.params.id);
   res.status(200).json(deletedVisit);
 }

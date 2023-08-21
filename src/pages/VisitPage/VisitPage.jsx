@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 export default function VisitPage() {
@@ -9,6 +9,7 @@ export default function VisitPage() {
   const [location, setLocation] = useState("");
   const [visits, setVisits] = useState([]);
 
+ 
   
 
   const fetchVisits = async () => {
@@ -19,6 +20,7 @@ export default function VisitPage() {
       console.error("Error fetching visits:", error);
     }
   };
+  
 
   const addVisit = async (e) => {
     e.preventDefault();
