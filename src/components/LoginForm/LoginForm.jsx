@@ -1,5 +1,6 @@
 import { useState } from "react";
 import * as usersService from "../../utilities/users-service";
+import ImageUpload from "../ImageUpload/ImageUpload";
 
 export default function LoginForm({ setUser }) {
   const [credentials, setCredentials] = useState({
@@ -29,9 +30,7 @@ export default function LoginForm({ setUser }) {
 
   return (
     <div>
-      <h1 class=" bg-sky-700 px-4 py-2 text-white hover:bg-sky-800 sm:px-8 sm:py-3">
-        Hello world!
-      </h1>
+      <ImageUpload />
       <div className="form-container">
         <form autoComplete="off" onSubmit={handleSubmit}>
           <label>Email</label>
