@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import * as userService from "../../utilities/users-service";
-import Logo from "../../images/logos/AdventurChats_logo_dark.png";
+import Logo from "../../images/logos/AdventurChats_Logo_horizontal_dark.png";
 import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -8,7 +8,6 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
@@ -16,6 +15,7 @@ import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import SearchIcon from "@mui/icons-material/Search";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
@@ -54,8 +54,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "75ch",
+      width: "35ch",
     },
+    fontSize: 20,
   },
 }));
 
@@ -93,21 +94,37 @@ export default function NavBar({ user, setUser }) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+      {user ? (
+        <div>
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+          <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleLogOut();
+              handleMenuClose();
+            }}
+          >
+            Logout
+          </MenuItem>
+        </div>
+      ) : (
+        <div>
+          <MenuItem onClick={handleMenuClose}>Login</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Sign Up</MenuItem>
+        </div>
+      )}
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar color="transparent" elevation={0}>
+      <AppBar color="transparent" elevation={0} position="sticky">
         <Toolbar>
           <Link to="/">
             <Box
               component="img"
               sx={{
-                height: "7rem",
+                height: "4rem",
                 p: 1,
               }}
               alt="ADVENTUR"
@@ -128,9 +145,10 @@ export default function NavBar({ user, setUser }) {
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
+              sx={{ "&:hover": { backgroundColor: "transparent" } }}
             >
               <Badge badgeContent={4} color="error">
-                <Avatar>
+                <Avatar sx={{ "&:hover": { backgroundColor: "lightgrey" } }}>
                   <ChatBubbleOutlineIcon sx={{ color: "#303841" }} />
                 </Avatar>
               </Badge>
@@ -139,34 +157,47 @@ export default function NavBar({ user, setUser }) {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              sx={{ "&:hover": { backgroundColor: "transparent" } }}
             >
               <Badge badgeContent={17} color="error">
-                <Avatar>
+                <Avatar sx={{ "&:hover": { backgroundColor: "lightgrey" } }}>
                   <NotificationsIcon sx={{ color: "#303841" }} />
                 </Avatar>
               </Badge>
             </IconButton>
-            <Tooltip title="Open settings">
-              <IconButton
-                edge="end"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-              >
-                <Avatar alt={user.name} src={user.profilePic} />
-              </IconButton>
-            </Tooltip>
-            {/* <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton> */}
+            {user ? (
+              <Tooltip title="Open settings">
+                <IconButton
+                  edge="end"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                >
+                  <Avatar alt={user.name} src={user.profilePic} />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Link to="/login">
+                <IconButton
+                  size="large"
+                  edge="end"
+                  sx={{ "&:hover": { backgroundColor: "transparent" } }}
+                >
+                  <Avatar
+                    variant="square"
+                    sx={{
+                      width: 112,
+                      borderRadius: 28,
+                      color: "#303841",
+                      "&:hover": { backgroundColor: "lightgrey" },
+                    }}
+                  >
+                    <AccountCircle sx={{ paddingRight: 1 }} />
+                    Sign in
+                  </Avatar>
+                </IconButton>
+              </Link>
+            )}
           </Stack>
         </Toolbar>
       </AppBar>
