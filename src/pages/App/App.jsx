@@ -18,6 +18,7 @@ export default function App() {
         <>
           <Routes>
             {/* Route components in here */}
+            <Route path="/" element={<HomePage />} />
             <Route path="/orders/new" element={<NewOrderPage />} />
             <Route path="/orders" element={<OrderHistoryPage />} />
           </Routes>

@@ -118,7 +118,7 @@ export default function NavBar({ user, setUser }) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar color="transparent" elevation={0}>
+      <AppBar color="transparent" elevation={0} position="sticky">
         <Toolbar>
           <Link to="/">
             <Box
