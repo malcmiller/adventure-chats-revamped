@@ -53,7 +53,7 @@ export default function ImageUpload() {
     <>
       {/* <form action="/upload" method="POST" encType="multipart/form-data"> */}
       <input type="file" onChange={(e) => setFiles(e.target.files)} multiple />
-      <button onClick={handleUpload}>Share</button>
+      <button onClick={handleUpload}>Upload</button>
       <br />
       {progress.started && (
         <progress max="100" value={progress.percentageComplete}></progress>
