@@ -117,18 +117,91 @@ export default function NavBar({ user, setUser }) {
   );
 
   return (
-    <nav>
-      <Link to="/orders">Order History</Link>
-      &nbsp; | &nbsp;
-      <Link to="/orders/new">New Order</Link>
-      &nbsp; | &nbsp;
-      <Link to="/visits">Visits</Link>
-      &nbsp;&nbsp;
-      <span>Welcome, {user.name}</span>
-      &nbsp;&nbsp;
-      <Link to="" onClick={handleLogOut}>
-        Log Out
-      </Link>
-    </nav>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar color="transparent" elevation={0} position="sticky">
+        <Toolbar>
+          <Link to="/">
+            <Box
+              component="img"
+              sx={{
+                height: "4rem",
+                p: 1,
+              }}
+              alt="ADVENTUR"
+              src={Logo}
+            />
+          </Link>
+          <Search sx={{ textAlign: "left", flexGrow: 1 }}>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ "aria-label": "search" }}
+            />
+          </Search>
+          <Stack direction="row">
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+              sx={{ "&:hover": { backgroundColor: "transparent" } }}
+            >
+              <Badge badgeContent={4} color="error">
+                <Avatar sx={{ "&:hover": { backgroundColor: "lightgrey" } }}>
+                  <ChatBubbleOutlineIcon sx={{ color: "#303841" }} />
+                </Avatar>
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+              sx={{ "&:hover": { backgroundColor: "transparent" } }}
+            >
+              <Badge badgeContent={17} color="error">
+                <Avatar sx={{ "&:hover": { backgroundColor: "lightgrey" } }}>
+                  <NotificationsIcon sx={{ color: "#303841" }} />
+                </Avatar>
+              </Badge>
+            </IconButton>
+            {user ? (
+              <Tooltip title="Open settings">
+                <IconButton
+                  edge="end"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                >
+                  <Avatar alt={user.name} src={user.profilePic} />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Link to="/login">
+                <IconButton
+                  size="large"
+                  edge="end"
+                  sx={{ "&:hover": { backgroundColor: "transparent" } }}
+                >
+                  <Avatar
+                    variant="square"
+                    sx={{
+                      width: 112,
+                      borderRadius: 28,
+                      color: "#303841",
+                      "&:hover": { backgroundColor: "lightgrey" },
+                    }}
+                  >
+                    <AccountCircle sx={{ paddingRight: 1 }} />
+                    Sign in
+                  </Avatar>
+                </IconButton>
+              </Link>
+            )}
+          </Stack>
+        </Toolbar>
+      </AppBar>
+      {renderMenu}
+    </Box>
   );
 }
