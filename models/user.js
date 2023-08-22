@@ -40,7 +40,7 @@ const userSchema = new Schema(
     followers: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Follower",
+        ref: "User",
       },
     ],
   },
@@ -52,7 +52,7 @@ const userSchema = new Schema(
         return ret;
       },
     },
-  },
+  }
 );
 
 userSchema.pre("save", async function (next) {

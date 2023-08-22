@@ -2,9 +2,6 @@ const express = require("express");
 const path = require("path");
 const favicon = require("serve-favicon");
 const logger = require("morgan");
-const { uploadImage } = require("./config/uploadImage");
-const { deleteImage } = require("./config/deleteImage");
-const Image = require("./models/image");
 // Always require and configure near the top
 require("dotenv").config();
 // Connect to the database
@@ -43,6 +40,7 @@ app.use(require("./config/checkToken"));
 //       .json({ error: "An error occurred while processing the request" });
 //   }
 // });
+app.use("/api/images", require("./routes/api/images"));
 
 const port = process.env.PORT || 3001;
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as usersService from "../../utilities/users-service";
-import ImageUpload from "../ImageUpload/ImageUpload";
 
 export default function LoginForm({ setUser }) {
   const [credentials, setCredentials] = useState({
@@ -8,6 +8,7 @@ export default function LoginForm({ setUser }) {
     password: "",
   });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   function handleChange(evt) {
     setCredentials({ ...credentials, [evt.target.name]: evt.target.value });
@@ -23,6 +24,7 @@ export default function LoginForm({ setUser }) {
       // payload of the JSON Web Token (JWT)
       const user = await usersService.login(credentials);
       setUser(user);
+      navigate(-1);
     } catch {
       setError("Log In Failed - Try Again");
     }
@@ -30,7 +32,6 @@ export default function LoginForm({ setUser }) {
 
   return (
     <div>
-      <ImageUpload />
       <div className="form-container">
         <form autoComplete="off" onSubmit={handleSubmit}>
           <label>Email</label>

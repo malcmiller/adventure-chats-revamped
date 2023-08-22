@@ -26,7 +26,7 @@ export default function ImageUpload() {
       return { ...prevState, started: true };
     });
     axios
-      .post("http://localhost:3000/upload", formData, {
+      .post("/api/images/upload", formData, {
         onUploadProgress: (progressEvent) => {
           setProgress((prevState) => {
             return {
@@ -53,7 +53,7 @@ export default function ImageUpload() {
     <>
       {/* <form action="/upload" method="POST" encType="multipart/form-data"> */}
       <input type="file" onChange={(e) => setFiles(e.target.files)} multiple />
-      <button onClick={handleUpload}>Share</button>
+      <button onClick={handleUpload}>Upload</button>
       <br />
       {progress.started && (
         <progress max="100" value={progress.percentageComplete}></progress>
