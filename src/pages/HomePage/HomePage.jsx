@@ -3,7 +3,7 @@ import PlacesAutocomplete from "../../components/PlacesAutocomplete/PlacesAutoco
 export default function HomePage() {
   return (
     <>
-      <PlacesAutocomplete />
+      <h1>Home</h1>
     </>
   );
 }
