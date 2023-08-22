@@ -16,7 +16,13 @@ const s3Storage = multerS3({
   },
   key: (req, file, cb) => {
     const fileName =
-      "/postId/" + Date.now() + "_" + file.fieldname + "_" + file.originalname;
+      req.params.postId +
+      "/" +
+      Date.now() +
+      "_" +
+      file.fieldname +
+      "_" +
+      file.originalname;
     cb(null, fileName);
   },
 });
@@ -28,7 +34,7 @@ function sanitizeFile(file, cb) {
 
   // Check allowed extensions
   const isAllowedExt = fileExts.includes(
-    path.extname(file.originalname.toLowerCase()),
+    path.extname(file.originalname.toLowerCase())
   );
 
   // Mime type must be an image

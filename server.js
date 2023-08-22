@@ -2,9 +2,6 @@ const express = require("express");
 const path = require("path");
 const favicon = require("serve-favicon");
 const logger = require("morgan");
-const { uploadImage } = require("./config/uploadImage");
-const { deleteImage } = require("./config/deleteImage");
-const Image = require("./models/image");
 // Always require and configure near the top
 require("dotenv").config();
 // Connect to the database
@@ -24,24 +21,7 @@ app.use(express.static(path.join(__dirname, "build")));
 // assign the user object from the JWT to req.user
 app.use(require("./config/checkToken"));
 
-app.post("/upload", uploadImage.array("file"), async (req, res, next) => {
-  try {
-    req.files.forEach(async (file) => {
-      await Image.create({
-        name: file.originalname,
-        url: file.location,
-      });
-    });
-
-    res.json({ status: "success" });
-  } catch (error) {
-    // Handle the error here, you can send an error response or log it.
-    console.error("Error occurred:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while processing the request" });
-  }
-});
+app.use("/api/images", require("./routes/api/images"));
 
 const port = process.env.PORT || 3001;
 
