@@ -10,10 +10,10 @@ const visitSchema = new Schema(
     description: String,
     startDate: Date,
     endDate: Date,
-    location: {
-      type: Schema.Types.ObjectId,
-      ref: "Location",
-    },
+    // location: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Location",
+    // },
   },
   {
     timestamps: true,
@@ -21,3 +21,4 @@ const visitSchema = new Schema(
 );
 
 module.exports = mongoose.model("Visit", visitSchema);
+
