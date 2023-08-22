@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import * as userService from "../../utilities/users-service";
-import Logo from "../../images/logos/AdventurChats_logo_dark.png";
+import Logo from "../../images/logos/AdventurChats_Logo_horizontal_dark.png";
 import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -54,8 +54,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "75ch",
+      width: "35ch",
     },
+    fontSize: 20,
   },
 }));
 
@@ -107,7 +108,7 @@ export default function NavBar({ user, setUser }) {
             <Box
               component="img"
               sx={{
-                height: "7rem",
+                height: "4rem",
                 p: 1,
               }}
               alt="ADVENTUR"
