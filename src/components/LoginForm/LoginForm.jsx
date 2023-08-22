@@ -1,6 +1,5 @@
 import { useState } from "react";
 import * as usersService from "../../utilities/users-service";
-import ImageUpload from "../ImageUpload/ImageUpload";
 
 export default function LoginForm({ setUser }) {
   const [credentials, setCredentials] = useState({
@@ -30,7 +29,6 @@ export default function LoginForm({ setUser }) {
 
   return (
     <div>
-      <ImageUpload />
       <div className="form-container">
         <form autoComplete="off" onSubmit={handleSubmit}>
           <label>Email</label>
