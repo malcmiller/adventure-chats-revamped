@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { getAll, create,  } from "../../utilities/visits-api"
 
 export default function VisitPage() {
   const [title, setTitle] = useState("");
@@ -9,13 +9,16 @@ export default function VisitPage() {
   const [location, setLocation] = useState("");
   const [visits, setVisits] = useState([]);
 
- 
-  
+ useEffect(() => {
+    fetchVisits();
+  }, []);
+
 
   const fetchVisits = async () => {
     try {
-      const response = await axios.get("/api/visits"); // Replace with your API endpoint
+      const response = await getAll(); // Replace with your API endpoint
       setVisits(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error("Error fetching visits:", error);
     }
@@ -34,7 +37,8 @@ export default function VisitPage() {
     };
 
     try {
-      const response = await axios.post("/api/visits", newVisit);
+      const response = await create(newVisit);
+      console.log(response);
       console.log("Visit added:", response.data);
 
       // Clear form fields after successful submission
@@ -86,14 +90,6 @@ export default function VisitPage() {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        <div>
-          <label>Location:</label>
-          <input
-            type="text"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-        </div>
         <button type="submit">Add Visit</button>
       </form>
 
@@ -106,7 +102,6 @@ export default function VisitPage() {
               <p>Description: {visit.description}</p>
               <p>Start Date: {visit.startDate}</p>
               <p>End Date: {visit.endDate}</p>
-              <p>Location: {visit.location}</p>
             </li>
           ))}
         </ul>

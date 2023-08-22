@@ -12,6 +12,7 @@ require("./config/database");
 
 const app = express();
 
+
 app.use(logger("dev"));
 app.use(express.json());
 
@@ -24,29 +25,30 @@ app.use(express.static(path.join(__dirname, "build")));
 // assign the user object from the JWT to req.user
 app.use(require("./config/checkToken"));
 
-app.post("/upload", uploadImage.array("file"), async (req, res, next) => {
-  try {
-    req.files.forEach(async (file) => {
-      await Image.create({
-        name: file.originalname,
-        url: file.location,
-      });
-    });
+// app.post("/upload", uploadImage.array("file"), async (req, res, next) => {
+//   try {
+//     req.files.forEach(async (file) => {
+//       await Image.create({
+//         name: file.originalname,
+//         url: file.location,
+//       });
+//     });
 
-    res.json({ status: "success" });
-  } catch (error) {
-    // Handle the error here, you can send an error response or log it.
-    console.error("Error occurred:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while processing the request" });
-  }
-});
+//     res.json({ status: "success" });
+//   } catch (error) {
+//     // Handle the error here, you can send an error response or log it.
+//     console.error("Error occurred:", error);
+//     res
+//       .status(500)
+//       .json({ error: "An error occurred while processing the request" });
+//   }
+// });
 
 const port = process.env.PORT || 3001;
 
 // Put API routes here, before the "catch all" route
 app.use("/api/users", require("./routes/api/users"));
+app.use('/api/visits', require('./routes/api/visits'));
 
 
 
