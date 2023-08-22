@@ -57,6 +57,16 @@ app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.listen(port, function () {
+const server = app.listen(port, function () {
   console.log(`Express app running on port ${port}`);
+});
+
+// Initialize socket.io
+const io = require("./config/socket").init(server);
+
+io.on("connection", (socket) => {
+  console.log(`Socket connected: ${socket.id}`)
+  socket.on("newMessage", (msg) => {
+    socket.broadcast.emit("newMessage", msg);
+  });
 });
