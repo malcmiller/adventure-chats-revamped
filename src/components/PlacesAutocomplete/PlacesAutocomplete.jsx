@@ -12,8 +12,6 @@ import { debounce } from "@mui/material/utils";
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
-const GOOGLE_MAPS_API_KEY = "AIzaSyAm-uPc1tMxfxhVcj4XvcRXSSjiL2YAXAY";
-
 function loadScript(src, position, id) {
   if (!position) {
     return;
@@ -37,7 +35,7 @@ export default function GoogleMaps() {
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
       loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
+        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&libraries=places`,
         document.querySelector("head"),
         "google-maps"
       );
@@ -108,7 +106,7 @@ export default function GoogleMaps() {
       onChange={(event, newValue) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
-        console.log(newValue.place_id); // THIS IS WHERE YOU GET THE PLACE_ID OF THE SELECTED PLACE
+        console.log(newValue ? newValue.place_id : null); // THIS IS WHERE YOU GET THE PLACE_ID OF THE SELECTED PLACE
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
