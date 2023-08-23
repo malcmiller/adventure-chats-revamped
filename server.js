@@ -23,16 +23,17 @@ app.use(require("./config/checkToken"));
 
 app.use("/api/images", require("./routes/api/images"));
 
-const port = process.env.PORT || 3001;
-
-// Put API routes here, before the "catch all" route
+// API routes should be defined before the "catch all" route
 app.use("/api/users", require("./routes/api/users"));
+// Add other API routes here, e.g., app.use("/api/categories", require("./routes/api/categories"));
 
 // The following "catch all" route (note the *) is necessary
 // to return the index.html on all non-AJAX/API requests
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
+
+const port = process.env.PORT || 3001;
 
 app.listen(port, function () {
   console.log(`Express app running on port ${port}`);

@@ -14,8 +14,6 @@ import {
 function CreatePostForm({
   title,
   setTitle,
-  location,
-  setLocation,
   categories,
   selectedCategories,
   handleCategoryChange,
@@ -25,10 +23,23 @@ function CreatePostForm({
   setImages,
   handleSubmit,
   isLoading,
+  activeCat, 
+  setActiveCat, 
 }) {
-    const [locationCountry, setLocationCountry] = useState("");
-    const [locationCity, setLocationCity] = useState("");
-    const [locationPlace, setLocationPlace] = useState("");
+  const [location, setLocation] = useState({
+    country: "",
+    city: "",
+    place: "",
+  });
+
+  
+  const handleLocationChange = (field, value) => {
+    setLocation((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <Typography variant="h3" className="post-title" align="center">
@@ -44,52 +55,60 @@ function CreatePostForm({
           fullWidth
           className="form-input"
         />
-        
-      <Box mt={2} mb={2}>
+
+        <Box mt={2} mb={2}>
           <TextField
-          label="Country"
-          value={locationCountry}
-          onChange={(e) => setLocationCountry(e.target.value)}
-          variant="outlined"
-          size="small"
-          fullWidth
-          className="form-input"
+            label="Country"
+            value={location.country}
+            onChange={(e) =>
+              handleLocationChange("country", e.target.value)
+            }
+            variant="outlined"
+            size="small"
+            fullWidth
+            className="form-input"
           />
 
-        <TextField
-          label="City"
-          value={locationCity}
-          onChange={(e) => setLocationCity(e.target.value)}
-          variant="outlined"
-          size="small"
-          fullWidth
-          className="form-input"
-        />
+          <TextField
+            label="City"
+            value={location.city}
+            onChange={(e) =>
+              handleLocationChange("city", e.target.value)
+            }
+            variant="outlined"
+            size="small"
+            fullWidth
+            className="form-input"
+          />
 
-        <TextField
-          label="Place"
-          value={locationPlace}
-          onChange={(e) => setLocationPlace(e.target.value)}
-          variant="outlined"
-          size="small"
-          fullWidth
-          className="form-input"
-        />
+          <TextField
+            label="Place"
+            value={location.place}
+            onChange={(e) =>
+              handleLocationChange("place", e.target.value)
+            }
+            variant="outlined"
+            size="small"
+            fullWidth
+            className="form-input"
+          />
+        </Box>
 
-      </Box>
         <label className="MuiFormLabel-root MuiInputLabel-root form-label">
-          Categories:
+        Categories:
         </label>
         <Container className="MuiContainer-root form-categories">
-          {categories.map((category) => (
-            <CategoryCheckbox
-              key={category._id}
-              category={category}
-              isSelected={selectedCategories.includes(category._id)}
-              handleCategoryChange={handleCategoryChange}
-            />
-          ))}
-        </Container>
+        {Array.isArray(categories) && categories.map((category) => (
+        <CategoryCheckbox
+          key={category._id}
+          category={category}
+          isSelected={selectedCategories.includes(category._id)}
+          handleCategoryChange={handleCategoryChange}
+          activeCat={activeCat}
+          setActiveCat={setActiveCat}
+        />
+      ))}
+      </Container>
      <Box mt={2} mb={2}>
         <TextField
           label="Content"
@@ -114,7 +133,7 @@ function CreatePostForm({
     
         <ImageUpload />
 
-        <Box pb={2} className="MuiBox-root form-button-container" >
+        <Box pb={2} className="MuiBox-root form-button-container">
           <Button
             type="submit"
             variant="contained"
@@ -122,7 +141,7 @@ function CreatePostForm({
             className="form-button"
           >
             {isLoading ? "Creating..." : "Create Post"}
-          </Button >
+          </Button>
         </Box>
       </Container>
     </form>
