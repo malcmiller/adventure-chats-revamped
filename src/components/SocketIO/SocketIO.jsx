@@ -1,56 +1,50 @@
-import React, { useState, useEffect, useRef } from "react";
-import { io } from "socket.io-client";
 
-export default function SocketIO() {
-  const [messages, setMessages] = useState([]);
+import io from "socket.io-client";
+import { useEffect, useState } from "react";
+
+const socket = io.connect("http://localhost:3001");
+
+export default function App() {
+  //Room State
+  const [room, setRoom] = useState("");
+
+  // Messages States
   const [message, setMessage] = useState("");
+  const [messageReceived, setMessageReceived] = useState("");
 
-  const socketRef = useRef(null);
-  let socket;
+  const joinRoom = () => {
+    if (room !== "") {
+      socket.emit("join_room", room);
+    }
+  };
+
+  const sendMessage = () => {
+    socket.emit("send_message", { message, room });
+  };
 
   useEffect(() => {
-    if (!socketRef.current) {
-      socketRef.current = io();
-    }
-    socket = socketRef.current;
-
-    socket.on("newMessage", (msg) => {
-      setMessages((m) => [...m, msg]);
+    socket.on("receive_message", (data) => {
+      setMessageReceived(data.message);
     });
-
-    return () => {
-      socket.removeAllListeners("newMessage");
-      socket.disconnect();
-    };
   }, []);
-
-  function handleChange(e) {
-    setMessage(e.target.value);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    setMessages((m) => [...m, message]);
-    socketRef.current.emit("newMessage", message);
-    setMessage("");
-  }
-
   return (
     <div className="App">
-      <h1>Welcome to chatapp</h1>
-      <div>
-        <ul>
-          {messages.map((msg, idx) => (
-            <li key={msg + idx}>{msg}</li>
-          ))}
-        </ul>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <input type="text" onChange={handleChange} value={message} />
-        <button type="submit">Say Hello</button>
-      </form>
+      <input
+        placeholder="Room Number..."
+        onChange={(event) => {
+          setRoom(event.target.value);
+        }}
+      />
+      <button onClick={joinRoom}> Join Room</button>
+      <input
+        placeholder="Message..."
+        onChange={(event) => {
+          setMessage(event.target.value);
+        }}
+      />
+      <button onClick={sendMessage}> Send Message</button>
+      <h1> Message:</h1>
+      {messageReceived}
     </div>
   );
 }
-
-

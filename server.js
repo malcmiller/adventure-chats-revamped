@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const favicon = require("serve-favicon");
 const logger = require("morgan");
+const cors = require("cors");
 // Always require and configure near the top
 require("dotenv").config();
 // Connect to the database
@@ -66,7 +67,7 @@ const io = require("./config/socket").init(server);
 
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`)
-  socket.on("newMessage", (msg) => {
-    socket.broadcast.emit("newMessage", msg);
+  socket.on("send_message", (msg) => {
+    socket.broadcast.emit("receive_message", msg);
   });
 });
