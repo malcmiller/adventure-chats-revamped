@@ -57,13 +57,13 @@ app.use(require("./config/checkToken"));
 //       .json({ error: "An error occurred while processing the request" });
 //   }
 // });
-app.use("/api/images", require("./routes/api/images"));
 
 // API routes should be defined before the "catch all" route
+app.use("/api/images", require("./routes/api/images"));
 app.use("/api/users", require("./routes/api/users"));
+app.use('/api/visits', require('./routes/api/visits'));
 app.use("/api/visits", require("./routes/api/profiles"));
-app.use("/api/visits", require("./routes/api/visits"));
-
+app.use("/api/chat", require("./routes/api/chat"));
 app.use("/api/categories", require("./routes/api/categories"));
 
 // The following "catch all" route (note the *) is necessary
@@ -74,6 +74,16 @@ app.get("/*", function (req, res) {
 
 const port = process.env.PORT || 3001;
 
-app.listen(port, function () {
+const server = app.listen(port, function () {
   console.log(`Express app running on port ${port}`);
+});
+
+// Initialize socket.io
+const io = require("./config/socket").init(server);
+
+io.on("connection", (socket) => {
+  console.log(`Socket connected: ${socket.id}`)
+  socket.on("send_message", (msg) => {
+    socket.broadcast.emit("receive_message", msg);
+  });
 });
