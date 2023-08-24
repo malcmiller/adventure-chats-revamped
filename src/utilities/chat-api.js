@@ -5,6 +5,6 @@ export function getAllChatMessages() {
   return sendRequest(BASE_URL);
 }
 
-export function addChatMessage(chatMessage) {
+export function createChatMessage(chatMessage) {
   return sendRequest(BASE_URL, 'POST', chatMessage);
 }

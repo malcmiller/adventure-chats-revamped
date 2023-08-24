@@ -8,8 +8,7 @@ import NewOrderPage from '../NewOrderPage/NewOrderPage';
 import OrderHistoryPage from '../OrderHistoryPage/OrderHistoryPage';
 import NavBar from '../../components/NavBar/NavBar';
 import VisitPage from '../VisitPage/VisitPage';
-import SocketIO from '../../components/SocketIO/SocketIO';
-
+import ChatWindow from '../../components/ChatWindow/ChatWindow';
 export default function App() {
   const [user, setUser] = useState(getUser());
 
@@ -25,7 +24,7 @@ export default function App() {
             <Route path="/orders" element={<OrderHistoryPage />} />
             <Route path="/visits" element={<VisitPage />} />
           </Routes>
-          <SocketIO />
+          <ChatWindow user={user} />
         </>
       ) : (
         <>
