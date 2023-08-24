@@ -36,6 +36,7 @@ export default function PlacesAutocomplete({ locationData, setLocationData }) {
         "google-maps"
       );
     }
+
     loaded.current = true;
   }
 

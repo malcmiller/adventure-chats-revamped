@@ -1,14 +1,13 @@
 import React from "react";
+import PlacesAutocomplete from "../PlacesAutocomplete/PlacesAutocomplete";
 import CategoryCheckbox from "../CategoryCheckbox/CategoryCheckbox";
-import ImageUpload from "../ImageUpload/ImageUpload"; 
-import { useState } from "react";
-
 import {
   Button,
   TextField,
   Container,
   Box,
   Typography,
+  Grid,
 } from "@mui/material";
 
 function CreatePostForm({
@@ -16,25 +15,15 @@ function CreatePostForm({
   setTitle,
   content,
   setContent,
-  images,
-  setImages,
   handleSubmit,
   isLoading,
+  selectedCategories,
+  handleCategoryChange,
+  locationData,
+  setLocationData,
+  images,
+  setImages,
 }) {
-  const [location, setLocation] = useState({
-    country: "",
-    city: "",
-    place: "",
-  });
-
-  
-  const handleLocationChange = (field, value) => {
-    setLocation((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
-
   return (
     <form onSubmit={handleSubmit}>
       <Typography variant="h3" className="post-title" align="center">
@@ -51,77 +40,37 @@ function CreatePostForm({
           className="form-input"
         />
 
+        <Grid sx={{ m: 1 }}>
+          <PlacesAutocomplete
+            locationData={locationData}
+            setLocationData={setLocationData}
+          />
+        </Grid>
+
+        <label className="MuiFormLabel-root MuiInputLabel-root form-label"></label>
+        <Container className="MuiContainer-root form-categories">
+          <CategoryCheckbox
+            activeCat={selectedCategories}
+            setActiveCat={handleCategoryChange}
+          />
+        </Container>
         <Box mt={2} mb={2}>
           <TextField
-            label="Country"
-            value={location.country}
-            onChange={(e) =>
-              handleLocationChange("country", e.target.value)
-            }
+            label="Content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             variant="outlined"
-            size="small"
-            fullWidth
-            className="form-input"
-          />
-
-          <TextField
-            label="City"
-            value={location.city}
-            onChange={(e) =>
-              handleLocationChange("city", e.target.value)
-            }
-            variant="outlined"
-            size="small"
-            fullWidth
-            className="form-input"
-          />
-
-          <TextField
-            label="Place"
-            value={location.place}
-            onChange={(e) =>
-              handleLocationChange("place", e.target.value)
-            }
-            variant="outlined"
-            size="small"
+            multiline
+            rows={4}
             fullWidth
             className="form-input"
           />
         </Box>
-
-        <label className="MuiFormLabel-root MuiInputLabel-root form-label">
-          
-        </label>
-        <Container className="MuiContainer-root form-categories">
-         
-            <CategoryCheckbox
-            />
-      
-        </Container>
-     <Box mt={2} mb={2}>
-        <TextField
-          label="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          variant="outlined"
-          multiline
-          rows={4}
-          fullWidth
-          className="form-input"
+        <input
+          type="file"
+          onChange={(e) => setImages(e.target.files)}
+          multiple
         />
-      </Box>  
-        <TextField
-          label="Images"
-          value={images}
-          onChange={(e) => setImages(e.target.value)}
-          variant="outlined"
-          size="small"
-          fullWidth
-          className="form-input"
-        />
-    
-        <ImageUpload />
-
         <Box pb={2} className="MuiBox-root form-button-container">
           <Button
             type="submit"
