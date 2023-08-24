@@ -87,7 +87,7 @@ export default function GoogleMaps({ locationData, setLocationData }) {
 
   useEffect(() => {
     if (!value) {
-      locationData = { googlePlaceId: "", name: "" };
+      locationData = { googlePlaceId: "", placeName: "" };
     }
   }, [value, locationData]);
 
@@ -111,7 +111,7 @@ export default function GoogleMaps({ locationData, setLocationData }) {
         if (newValue) {
           setLocationData({
             googlePlaceId: newValue.place_id,
-            name: newValue.description,
+            placeName: newValue.description,
           });
         }
       }}
