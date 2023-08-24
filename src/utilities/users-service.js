@@ -64,25 +64,11 @@ export function getToken() {
 
 export function getUser() {
   const token = getToken();
+  // console.log(JSON.parse(atob(token.split(".")[1])).user);
   return token ? JSON.parse(atob(token.split(".")[1])).user : null;
 }
 
 export function checkToken() {
   // We can't forget how to use .then with promises
   return usersAPI.checkToken().then((dateStr) => new Date(dateStr));
-}
-
-export function getProfile() {
-  const token = getToken();
-  if (token) {
-    const decodedToken = JSON.parse(atob(token.split(".")[1]));
-    console.log("Decoded Token:", decodedToken);
-
-    const userProfile = decodedToken.user && decodedToken.user.profile;
-    console.log("User Profile:", userProfile);
-
-    return userProfile || null;
-  } else {
-    return null;
-  }
 }

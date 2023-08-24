@@ -44,7 +44,11 @@ async function login(req, res) {
     if (!user) throw new Error();
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) throw new Error();
-    const token = createJWT(user);
+    const profile = await Profile.findOne({ _id: user.profile });
+    console.log(profile)
+    const token = createJWT({
+     email: user.email, useUsername: profile.useUsername, username: profile.username, firstName: profile.firstName, lastName: profile.lastName, profilePic: profile.profilePic,});
+
     res.json(token);
   } catch (err) {
     res.status(400).json("Bad Credentials");
