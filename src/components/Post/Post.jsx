@@ -1,26 +1,19 @@
 import React, { useState } from "react";
 import CreatePostForm from "../CreatePostForm/CreatePostForm";
-import {  Container, Paper } from "@mui/material";
-
-
+import { Container, Paper } from "@mui/material";
 
 function Post() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [categories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [locationData, setLocationData] = useState({
+    googlePlaceId: "",
+    placeName: "",
+  });
+  const [images, setImages] = useState("");
+  const [activeCat, setActiveCat] = useState(null);
 
-  const [locationCountry, setLocationCountry] = useState(""); 
-  const [locationCity, setLocationCity] = useState(""); 
-  const [locationPlace, setLocationPlace] = useState(""); 
-
-  const [images, setImages] = useState(""); 
-  const [activeCat, setActiveCat] = useState(null)
- 
-
-  
-  
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prevSelected) =>
       prevSelected.includes(categoryId)
@@ -32,36 +25,39 @@ function Post() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-  
-    const newPost = {
-      title,
-      content,
-      location: { country: locationCountry, city: locationCity, place: locationPlace },
-      categories: selectedCategories,
-      images: images, 
-    };
-  
+
+    const newPost = new FormData();
+    newPost.append("title", title);
+    newPost.append("content", content);
+    newPost.append("location", JSON.stringify(locationData));
+    selectedCategories.forEach((categoryId) => {
+      newPost.append("categories", categoryId);
+    });
+
+    // Append selected images to FormData
+    for (let i = 0; i < images.length; i++) {
+      newPost.append("images", images[i]);
+    }
+
     try {
       await fetch("/api/posts", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newPost),
+        body: newPost,
       });
-  
+
       // reset the form fields here
       setTitle("");
       setContent("");
-      setLocationCountry("");
-      setLocationCity("");
-      setLocationPlace("");
+      setLocationData({
+        googlePlaceId: "",
+        placeName: "",
+      });
       setSelectedCategories([]);
-      setImages("");
+      setImages([]);
     } catch (error) {
       console.error("Error creating post:", error);
     }
-  
+
     setIsLoading(false);
   };
 
@@ -69,27 +65,22 @@ function Post() {
     <div>
       <Container maxWidth="md" className="post-container">
         <Paper elevation={3} className="card">
-        <CreatePostForm
-          title={title}
-          setTitle={setTitle}
-          locationCountry={locationCountry}
-          setLocationCountry={setLocationCountry}
-          locationCity={locationCity}
-          setLocationCity={setLocationCity}
-          locationPlace={locationPlace}
-          setLocationPlace={setLocationPlace}
-          content={content}
-          setContent={setContent}
-          categories={categories}
-          selectedCategories={selectedCategories}
-          handleCategoryChange={handleCategoryChange}
-          images={images}
-          setImages={setImages}
-          handleSubmit={handleSubmit}
-          isLoading={isLoading}
-          activeCat={activeCat} // Pass activeCat as a prop
-          setActiveCat={setActiveCat} // Pass setActiveCat as a prop
-        />
+          <CreatePostForm
+            title={title}
+            setTitle={setTitle}
+            locationData={locationData}
+            setLocationData={setLocationData}
+            content={content}
+            setContent={setContent}
+            selectedCategories={selectedCategories}
+            handleCategoryChange={handleCategoryChange}
+            images={images}
+            setImages={setImages}
+            handleSubmit={handleSubmit}
+            isLoading={isLoading}
+            activeCat={activeCat}
+            setActiveCat={setActiveCat}
+          />
         </Paper>
       </Container>
     </div>
@@ -97,7 +88,3 @@ function Post() {
 }
 
 export default Post;
-
-
-
-
