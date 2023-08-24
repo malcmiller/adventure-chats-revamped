@@ -4,8 +4,8 @@ const BASE_URL = '/api/categories';
 export async function getAll() {
   try {
     const fetchedCategories = await sendRequest(BASE_URL);
-    console.log("Fetched categories:", fetchedCategories); // Add this line
-    return fetchedCategories;
+    console.log("Fetched categories:", fetchedCategories); 
+    return fetchedCategories.data;
   } catch (error) {
     console.error("Error fetching categories:", error);
     throw error;

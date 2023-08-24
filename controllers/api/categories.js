@@ -3,12 +3,14 @@ const Category = require('../../models/category');
 module.exports = {
   index,
   show,
-  fetchCategories, // Add this line
+  // fetchCategories
 };
 
 async function index(req, res) {
+  console.log("index")
   try {
-    const categories = await Category.find({}).sort('sortOrder');
+    const categories = await Category.find({})
+    console.log(categories)
     res.json(categories);
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -29,11 +31,11 @@ async function show(req, res) {
   }
 }
 
-async function fetchCategories(req, res) {
-  try {
-    const categories = await Category.find({}).sort('sortOrder');
-    res.json(categories);
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    res.status(500).json({ error: "An error occurred while fetching categories." });
-  }}
+// async function fetchCategories(req, res) {
+//   try {
+//     const categories = await Category.find({})
+//     res.json(categories);
+//   } catch (error) {
+//     console.error("Error fetching categories:", error);
+//     res.status(500).json({ error: "An error occurred while fetching categories." });
+//   }}

@@ -1,42 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { useRef } from 'react';
+import React, { useState } from "react";
 import CreatePostForm from "../CreatePostForm/CreatePostForm";
 import {  Container, Paper } from "@mui/material";
-import * as categoriesAPI from '../../utilities/categories-api';
+
 
 
 function Post() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [categories, setCategories] = useState([]);
+  const [categories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [locationCountry, setLocationCountry] = useState(""); // Define locationCountry state
-  const [locationCity, setLocationCity] = useState(""); // Define locationCity state
-  const [locationPlace, setLocationPlace] = useState(""); // Define locationPlace state
+  const [locationCountry, setLocationCountry] = useState(""); 
+  const [locationCity, setLocationCity] = useState(""); 
+  const [locationPlace, setLocationPlace] = useState(""); 
 
-  const [images, setImages] = useState(""); // Define images state
+  const [images, setImages] = useState(""); 
   const [activeCat, setActiveCat] = useState(null)
-  const categoriesRef = useRef([]);
+ 
 
-  useEffect(() => {
-    async function getCategories() {
-      try {
-        const categories = await categoriesAPI.getAll();
-        categoriesRef.current = categories;
-        setCategories(categories); // Set the categories state
-        setActiveCat(categoriesRef.current[0]?.name || ''); // Set activeCat to the first category name
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-
-    
-    }
-    
-    getCategories();
-  }, []);
-
+  
+  
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prevSelected) =>
       prevSelected.includes(categoryId)

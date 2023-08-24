@@ -14,17 +14,12 @@ import {
 function CreatePostForm({
   title,
   setTitle,
-  categories,
-  selectedCategories,
-  handleCategoryChange,
   content,
   setContent,
   images,
   setImages,
   handleSubmit,
   isLoading,
-  activeCat, 
-  setActiveCat, 
 }) {
   const [location, setLocation] = useState({
     country: "",
@@ -95,20 +90,14 @@ function CreatePostForm({
         </Box>
 
         <label className="MuiFormLabel-root MuiInputLabel-root form-label">
-        Categories:
+          
         </label>
         <Container className="MuiContainer-root form-categories">
-        {Array.isArray(categories) && categories.map((category) => (
-        <CategoryCheckbox
-          key={category._id}
-          category={category}
-          isSelected={selectedCategories.includes(category._id)}
-          handleCategoryChange={handleCategoryChange}
-          activeCat={activeCat}
-          setActiveCat={setActiveCat}
-        />
-      ))}
-      </Container>
+         
+            <CategoryCheckbox
+            />
+      
+        </Container>
      <Box mt={2} mb={2}>
         <TextField
           label="Content"
