@@ -42,8 +42,8 @@ const SignUpForm = (props) => {
 
   const [formData, setFormData] = useState({
     username: "",
-    firstname: "",
-    lastname: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     passwordConf: "",
@@ -68,14 +68,14 @@ const SignUpForm = (props) => {
     }
   };
 
-  const { username, firstname, lastname, email, password, passwordConf } =
+  const { username, firstName, lastName, email, password, passwordConf } =
     formData;
 
   const isFormInvalid = () => {
     return !(
       username &&
-      firstname &&
-      lastname &&
+      firstName &&
+      lastName &&
       email &&
       password &&
       password === passwordConf
@@ -99,23 +99,23 @@ const SignUpForm = (props) => {
       </Grid>
       <TextField
         fullWidth
-        name="firstname"
-        autoComplete="firstname"
+        name="firstName"
+        autoComplete="given-name"
         label="First name"
         multiline
         maxRows={4}
-        value={firstname}
+        value={firstName}
         onChange={handleChange}
         sx={{ m: 1, width: "30ch" }}
       />
       <TextField
         fullWidth
-        name="lastname"
-        autoComplete="lastname"
+        name="lastName"
+        autoComplete="family-name"
         label="Last name"
         multiline
         maxRows={4}
-        value={lastname}
+        value={lastName}
         onChange={handleChange}
         sx={{ m: 1, width: "30ch" }}
       />
@@ -140,6 +140,7 @@ const SignUpForm = (props) => {
             name="password"
             id="outlined-password"
             type={showPassword ? "text" : "password"}
+            autocomplete="new-password"
             value={password}
             onChange={handleChange}
             endAdornment={
