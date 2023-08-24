@@ -47,7 +47,7 @@ const SignUpForm = (props) => {
     firstName: "",
     lastName: "",
     googlePlaceId: "",
-    name: "",
+    placeName: "",
     email: "",
     password: "",
     passwordConf: "",
@@ -55,7 +55,7 @@ const SignUpForm = (props) => {
 
   const [locationData, setLocationData] = useState({
     googlePlaceId: "",
-    name: "",
+    placeName: "",
   });
 
   const handleChange = (e) => {
@@ -63,7 +63,7 @@ const SignUpForm = (props) => {
     setFormData({
       ...formData,
       googlePlaceId: locationData.googlePlaceId,
-      name: locationData.name,
+      placeName: locationData.name,
       [e.target.name]: e.target.value,
     });
   };
