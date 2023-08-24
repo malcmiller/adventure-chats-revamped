@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function ImageUpload() {
+export default function ImageUpload({ imageFor /*post || user*/, id }) {
   const [files, setFiles] = useState();
   const [progress, setProgress] = useState({
     started: false,
@@ -19,14 +19,12 @@ export default function ImageUpload() {
       formData.append(`file`, files[i]);
     }
 
-    console.log(formData);
-
     setMessage("Uploading...");
     setProgress((prevState) => {
       return { ...prevState, started: true };
     });
     axios
-      .post("/api/images/upload", formData, {
+      .post(`/api/images/upload/${imageFor}/${id}`, formData, {
         onUploadProgress: (progressEvent) => {
           setProgress((prevState) => {
             return {
@@ -51,7 +49,10 @@ export default function ImageUpload() {
 
   return (
     <>
-      {/* <form action="/upload" method="POST" encType="multipart/form-data"> */}
+      {/* <Button variant="contained" component="label">
+        <CloudUploadIcon />
+
+      </Button> */}
       <input type="file" onChange={(e) => setFiles(e.target.files)} multiple />
       <button onClick={handleUpload}>Upload</button>
       <br />
@@ -60,7 +61,6 @@ export default function ImageUpload() {
       )}
       <br />
       {message && <span>{message}</span>}
-      {/* </form> */}
     </>
   );
 }

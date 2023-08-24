@@ -1,58 +1,208 @@
-import { Component } from 'react';
-import { signUp } from '../../utilities/users-service';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "../../utilities/users-service";
+import {
+  Box,
+  Grid,
+  FormControl,
+  TextField,
+  Button,
+  InputLabel,
+  OutlinedInput,
+  InputAdornment,
+  IconButton,
+} from "@mui/material/";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-export default class SignUpForm extends Component {
-  state = {
-    name: '',
-    email: '',
-    password: '',
-    confirm: '',
-    error: ''
+const SignUpForm = (props) => {
+  const navigate = useNavigate();
+
+  const [message, setMessage] = useState([""]);
+
+  const updateMessage = (msg) => {
+    setMessage(msg);
   };
 
-  handleChange = (evt) => {
-    this.setState({
-      [evt.target.name]: evt.target.value,
-      error: ''
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const [showConfPassword, setShowConfPassword] = useState(false);
+
+  const handleClickShowConfPassword = () => {
+    setShowConfPassword(!showConfPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const [formData, setFormData] = useState({
+    username: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    passwordConf: "",
+  });
+
+  const handleChange = (e) => {
+    updateMessage("");
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
   };
 
-  handleSubmit = async (evt) => {
-    evt.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const {name, email, password} = this.state;
-      const formData = {name, email, password};
-      // The promise returned by the signUp service
-      // method will resolve to the user object included
-      // in the payload of the JSON Web Token (JWT)
-      const user = await signUp(formData);
-      this.props.setUser(user);
-    } catch {
-      // An error occurred
-      // Probably due to a duplicate email
-      this.setState({ error: 'Sign Up Failed - Try Again' });
+      await signUp(formData);
+      props.setUser();
+      navigate(-1);
+    } catch (err) {
+      updateMessage(err.message);
     }
   };
 
-  render() {
-    const disable = this.state.password !== this.state.confirm;
-    return (
-      <div>
-        <div className="form-container">
-          <form autoComplete="off" onSubmit={this.handleSubmit}>
-            <label>Name</label>
-            <input type="text" name="name" value={this.state.name} onChange={this.handleChange} required />
-            <label>Email</label>
-            <input type="email" name="email" value={this.state.email} onChange={this.handleChange} required />
-            <label>Password</label>
-            <input type="password" name="password" value={this.state.password} onChange={this.handleChange} required />
-            <label>Confirm</label>
-            <input type="password" name="confirm" value={this.state.confirm} onChange={this.handleChange} required />
-            <button type="submit" disabled={disable}>SIGN UP</button>
-          </form>
-        </div>
-        <p className="error-message">&nbsp;{this.state.error}</p>
-      </div>
+  const { username, firstname, lastname, email, password, passwordConf } =
+    formData;
+
+  const isFormInvalid = () => {
+    return !(
+      username &&
+      firstname &&
+      lastname &&
+      email &&
+      password &&
+      password === passwordConf
     );
-  }
-}
+  };
+
+  return (
+    <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
+      <Grid>
+        <TextField
+          fullWidth
+          name="username"
+          autoComplete="username"
+          label="Username"
+          multiline
+          maxRows={4}
+          value={username}
+          onChange={handleChange}
+          sx={{ m: 1, width: "35ch" }}
+        />
+      </Grid>
+      <TextField
+        fullWidth
+        name="firstname"
+        autoComplete="firstname"
+        label="First name"
+        multiline
+        maxRows={4}
+        value={firstname}
+        onChange={handleChange}
+        sx={{ m: 1, width: "30ch" }}
+      />
+      <TextField
+        fullWidth
+        name="lastname"
+        autoComplete="lastname"
+        label="Last name"
+        multiline
+        maxRows={4}
+        value={lastname}
+        onChange={handleChange}
+        sx={{ m: 1, width: "30ch" }}
+      />
+      <Grid>
+        <TextField
+          fullWidth
+          name="email"
+          type={"email"}
+          autoComplete="email"
+          label="Email"
+          multiline
+          maxRows={4}
+          value={email}
+          onChange={handleChange}
+          sx={{ m: 1, width: "70ch" }}
+        />
+      </Grid>
+      <div>
+        <FormControl fullWidth sx={{ width: "100%" }} variant="outlined">
+          <InputLabel htmlFor="outlined-password">Password</InputLabel>
+          <OutlinedInput
+            name="password"
+            id="outlined-password"
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={handleChange}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+            sx={{ m: 1, width: "50ch" }}
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl fullWidth sx={{ width: "100%" }} variant="outlined">
+          <InputLabel htmlFor="outlined-passwordConf">
+            Password Confirmation
+          </InputLabel>
+          <OutlinedInput
+            name="passwordConf"
+            id="outlined-passwordConf"
+            type={showConfPassword ? "text" : "password"}
+            value={passwordConf}
+            onChange={handleChange}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowConfPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showConfPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password Confirmation"
+            sx={{ m: 1, width: "50ch" }}
+          />
+        </FormControl>
+      </div>
+      <div>
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={isFormInvalid()}
+          sx={{ m: 1, width: "35ch" }}
+        >
+          Sign Up
+        </Button>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <Button sx={{ m: 1, width: "35ch" }}>Cancel</Button>
+        </Link>
+      </div>
+      <Grid>{message}</Grid>
+    </Box>
+  );
+};
+
+export default SignUpForm;

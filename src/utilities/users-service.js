@@ -3,7 +3,7 @@
 // Service modules often depend upon API modules
 // for making AJAX requests to the server.
 
-import * as usersAPI from './users-api';
+import * as usersAPI from "./users-api";
 
 export async function signUp(userData) {
   console.log(userData)
@@ -20,7 +20,7 @@ console.log(response)
     if (error.response && error.response.data) {
       console.log("Sign Up failed: " + error.response.data);
     } else {
-      console.log("Sign Up failed, please check your details and try again.")
+      console.log("Sign Up failed, please check your details and try again.");
     }
     throw error;
   }
@@ -40,25 +40,25 @@ export async function login(credentials) {
     if (error.response && error.response.data) {
       console.log("Login failed: " + error.response.data);
     } else {
-      console.log("Login failed, please check your credentials and try again.")
+      console.log("Login failed, please check your credentials and try again.");
     }
     throw error;
   }
 }
 
 export function logOut() {
-  localStorage.removeItem('token');
+  localStorage.removeItem("token");
 }
 
 export function getToken() {
   // getItem will return null if the key does not exists
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (!token) return null;
-  const payload = JSON.parse(atob(token.split('.')[1]));
+  const payload = JSON.parse(atob(token.split(".")[1]));
   // A JWT's exp is expressed in seconds, not miliseconds
   if (payload.exp * 1000 < Date.now()) {
     // Token has expired
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     return null;
   }
   return token;
@@ -66,11 +66,10 @@ export function getToken() {
 
 export function getUser() {
   const token = getToken();
-  return token ? JSON.parse(atob(token.split('.')[1])).user : null;
+  return token ? JSON.parse(atob(token.split(".")[1])).user : null;
 }
 
 export function checkToken() {
   // We can't forget how to use .then with promises
-  return usersAPI.checkToken()
-    .then(dateStr => new Date(dateStr));
+  return usersAPI.checkToken().then((dateStr) => new Date(dateStr));
 }
