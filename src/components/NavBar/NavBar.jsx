@@ -1,19 +1,21 @@
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import * as userService from "../../utilities/users-service";
 import Logo from "../../images/logos/AdventurChats_Logo_horizontal_dark.png";
-import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
+import {
+  AppBar,
+  Box,
+  Stack,
+  Toolbar,
+  IconButton,
+  InputBase,
+  Badge,
+  MenuItem,
+  Menu,
+  Avatar,
+  Tooltip,
+} from "@mui/material/";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
@@ -65,7 +67,10 @@ export default function NavBar({ user, setUser }) {
     userService.logOut();
     setUser(null);
   }
-  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -75,6 +80,10 @@ export default function NavBar({ user, setUser }) {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const navigateAccount = () => {
+    navigate("/account");
   };
 
   const menuId = "primary-search-account-menu";
@@ -97,7 +106,14 @@ export default function NavBar({ user, setUser }) {
       {user ? (
         <div>
           <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-          <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+          <MenuItem
+            onClick={() => {
+              navigateAccount();
+              handleMenuClose();
+            }}
+          >
+            My account
+          </MenuItem>
           <MenuItem
             onClick={() => {
               handleLogOut();
@@ -173,7 +189,7 @@ export default function NavBar({ user, setUser }) {
                   aria-haspopup="true"
                   onClick={handleProfileMenuOpen}
                 >
-                  <Avatar alt={user.name} src={user.profilePic} />
+                  <Avatar /*alt={profile name} src={profile pic}*/ />
                 </IconButton>
               </Tooltip>
             ) : (

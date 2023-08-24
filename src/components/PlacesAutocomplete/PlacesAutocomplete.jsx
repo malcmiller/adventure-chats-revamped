@@ -1,14 +1,10 @@
 // Reference: https://mui.com/material-ui/react-autocomplete/#google-maps-place
 
-import * as React from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { Box, TextField, Autocomplete, Grid, Typography } from "@mui/material/";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import parse from "autosuggest-highlight/parse";
 import { debounce } from "@mui/material/utils";
+import parse from "autosuggest-highlight/parse";
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
@@ -27,10 +23,10 @@ function loadScript(src, position, id) {
 const autocompleteService = { current: null };
 
 export default function GoogleMaps() {
-  const [value, setValue] = React.useState(null);
-  const [inputValue, setInputValue] = React.useState("");
-  const [options, setOptions] = React.useState([]);
-  const loaded = React.useRef(false);
+  const [value, setValue] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState([]);
+  const loaded = useRef(false);
 
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
@@ -44,7 +40,7 @@ export default function GoogleMaps() {
     loaded.current = true;
   }
 
-  const fetch = React.useMemo(
+  const fetch = useMemo(
     () =>
       debounce((request, callback) => {
         autocompleteService.current.getPlacePredictions(request, callback);
@@ -52,7 +48,7 @@ export default function GoogleMaps() {
     []
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     let active = true;
 
     if (!autocompleteService.current && window.google) {
