@@ -16,30 +16,27 @@ function checkToken(req, res) {
 }
 
 async function create(req, res) {
-  const user = await User.findOne({ email: req.body.email });
-  const profile = await Profile.findOne({ username: req.body.username });
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    const profile = await Profile.findOne({ username: req.body.username });
 
-  if (user) {
-    res.status(500).json({ error: "Email already in use." });
-  } else if (profile) {
-    res.status(500).json({ error: "Username not available." });
-  } else {
-    Location.create(req.body).then((newLocation) => {
+    if (user) {
+      res.status(500).json({ error: "Email already in use." });
+    } else if (profile) {
+      res.status(500).json({ error: "Username not available." });
+    } else {
+      const newLocation = await Location.create(req.body);
       req.body.homeBase = newLocation._id;
-      Profile.create(req.body).then((newProfile) => {
-        req.body.profile = newProfile._id;
-        User.create(req.body)
-          .then((user) => {
-            const token = createJWT(user);
-            res.status(200).json(token);
-          })
-          .catch((err) => {
-            Location.findByIdAndDelete(newLocation._id);
-            Profile.findByIdAndDelete(newProfile._id);
-            res.status(500).json({ err: err.errmsg });
-          });
-      });
-    });
+      const newProfile = await Profile.create(req.body);
+      req.body.profile = newProfile._id;
+      const newUser = await User.create(req.body);
+      const token = await createJWT(newUser);
+      res.status(200).json(token);
+    }
+  } catch (err) {
+    Location.findByIdAndDelete(newLocation._id);
+    Profile.findByIdAndDelete(newProfile._id);
+    res.status(500).json(err);
   }
 }
 
