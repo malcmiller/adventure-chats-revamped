@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../../models/user");
 const Profile = require("../../models/profile");
+const Location = require("../../models/location");
 
 module.exports = {
   create,
@@ -23,17 +24,21 @@ async function create(req, res) {
   } else if (profile) {
     res.status(500).json({ error: "Username not available." });
   } else {
-    Profile.create(req.body).then((newProfile) => {
-      req.body.profile = newProfile._id;
-      User.create(req.body)
-        .then((user) => {
-          const token = createJWT(user);
-          res.status(200).json(token);
-        })
-        .catch((err) => {
-          Profile.findByIdAndDelete(newProfile._id);
-          res.status(500).json({ err: err.errmsg });
-        });
+    Location.create(req.body).then((newLocation) => {
+      req.body.homeBase = newLocation._id;
+      Profile.create(req.body).then((newProfile) => {
+        req.body.profile = newProfile._id;
+        User.create(req.body)
+          .then((user) => {
+            const token = createJWT(user);
+            res.status(200).json(token);
+          })
+          .catch((err) => {
+            Location.findByIdAndDelete(newLocation._id);
+            Profile.findByIdAndDelete(newProfile._id);
+            res.status(500).json({ err: err.errmsg });
+          });
+      });
     });
   }
 }
