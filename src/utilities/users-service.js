@@ -6,9 +6,10 @@
 import * as usersAPI from "./users-api";
 
 export async function signUp(userData) {
+  console.log(userData)
   try {
     const response = await usersAPI.signUp(userData);
-    console.log(response);
+console.log(response)
     if (response.status === 200 && typeof response.data === "string") {
       localStorage.setItem("token", response.data);
       return getUser();
