@@ -9,8 +9,6 @@ require("./config/database");
 
 const app = express();
 
-
-
 app.use(logger("dev"));
 app.use(express.json());
 
@@ -63,10 +61,10 @@ app.use("/api/images", require("./routes/api/images"));
 
 // API routes should be defined before the "catch all" route
 app.use("/api/users", require("./routes/api/users"));
-app.use('/api/visits', require('./routes/api/visits'));
+app.use("/api/visits", require("./routes/api/profiles"));
+app.use("/api/visits", require("./routes/api/visits"));
 
 app.use("/api/categories", require("./routes/api/categories"));
-
 
 // The following "catch all" route (note the *) is necessary
 // to return the index.html on all non-AJAX/API requests
