@@ -140,7 +140,7 @@ const SignUpForm = (props) => {
             name="password"
             id="outlined-password"
             type={showPassword ? "text" : "password"}
-            autocomplete="new-password"
+            autoComplete="new-password"
             value={password}
             onChange={handleChange}
             endAdornment={
