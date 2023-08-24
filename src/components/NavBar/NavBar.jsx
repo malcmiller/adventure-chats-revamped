@@ -1,7 +1,7 @@
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as userService from "../../utilities/users-service";
 import Logo from "../../images/logos/AdventurChats_Logo_horizontal_dark.png";
-import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import {
   AppBar,
@@ -70,7 +70,7 @@ export default function NavBar({ user, setUser }) {
 
   const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -189,7 +189,7 @@ export default function NavBar({ user, setUser }) {
                   aria-haspopup="true"
                   onClick={handleProfileMenuOpen}
                 >
-                  <Avatar alt={user.name} src={user.profilePic} />
+                  <Avatar /*alt={profile name} src={profile pic}*/ />
                 </IconButton>
               </Tooltip>
             ) : (

@@ -9,24 +9,28 @@ import {
   Button,
 } from "@mui/material";
 
-export default function AccountPage() {
+export default function EditAccountPage({ user, setUser }) {
   return (
     <>
       <h1>Account</h1>
       <Box component="form">
         <TextField helperText="Please enter your name" label="Name" />
         <ImageUpload />
-        <TextField helperText="Please enter your email" label="Email" />
         <PlacesAutocomplete />
         <FormGroup>
           <FormControlLabel
-            control={<Switch defaultChecked />}
+            control={<Switch defaultChecked={user.messagable ? true : false} />}
             label="Messagable"
           />
         </FormGroup>
         <FormGroup>
           <FormControlLabel
-            control={<Switch defaultChecked color="secondary" />}
+            control={
+              <Switch
+                defaultChecked={user.searchable ? true : false}
+                color="secondary"
+              />
+            }
             label="Searchable"
           />
         </FormGroup>
