@@ -22,7 +22,7 @@ function loadScript(src, position, id) {
 
 const autocompleteService = { current: null };
 
-export default function GoogleMaps({ locationData, setLocationData }) {
+export default function PlacesAutocomplete({ locationData, setLocationData }) {
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
@@ -31,12 +31,11 @@ export default function GoogleMaps({ locationData, setLocationData }) {
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
       loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&libraries=places`,
+        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&libraries=places&callback=Function.prototype`,
         document.querySelector("head"),
         "google-maps"
       );
     }
-
     loaded.current = true;
   }
 
