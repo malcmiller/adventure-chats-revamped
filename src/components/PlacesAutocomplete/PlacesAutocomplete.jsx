@@ -22,7 +22,7 @@ function loadScript(src, position, id) {
 
 const autocompleteService = { current: null };
 
-export default function GoogleMaps() {
+export default function GoogleMaps({ locationData, setLocationData }) {
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
@@ -85,6 +85,12 @@ export default function GoogleMaps() {
     };
   }, [value, inputValue, fetch]);
 
+  useEffect(() => {
+    if (!value) {
+      locationData = { googlePlaceId: "", name: "" };
+    }
+  }, [value, locationData]);
+
   return (
     <Autocomplete
       id="google-map-demo"
@@ -102,7 +108,12 @@ export default function GoogleMaps() {
       onChange={(event, newValue) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
-        console.log(newValue ? newValue.place_id : null); // THIS IS WHERE YOU GET THE PLACE_ID OF THE SELECTED PLACE
+        if (newValue) {
+          setLocationData({
+            googlePlaceId: newValue.place_id,
+            name: newValue.description,
+          });
+        }
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
