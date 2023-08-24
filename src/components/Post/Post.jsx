@@ -1,36 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import CreatePostForm from "../CreatePostForm/CreatePostForm";
 import {  Container, Paper } from "@mui/material";
+
+
 
 function Post() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [categories, setCategories] = useState([]);
+  const [categories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [locationCountry, setLocationCountry] = useState(""); // Define locationCountry state
-  const [locationCity, setLocationCity] = useState(""); // Define locationCity state
-  const [locationPlace, setLocationPlace] = useState(""); // Define locationPlace state
+  const [locationCountry, setLocationCountry] = useState(""); 
+  const [locationCity, setLocationCity] = useState(""); 
+  const [locationPlace, setLocationPlace] = useState(""); 
 
-  const [images, setImages] = useState(""); // Define images state
-  useEffect(() => {
-    // Fetch categories from the backend and update the state
-    fetchCategories();
-  }, []);
+  const [images, setImages] = useState(""); 
+  const [activeCat, setActiveCat] = useState(null)
+ 
 
-  const fetchCategories = async () => {
-    try {
-      const response = await fetch("/api/categories"); // Adjust the endpoint
-      const data = await response.json();
-      setCategories(data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-
-  const handleCategoryChange = (event) => {
-    const categoryId = event.target.value;
+  
+  
+  const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prevSelected) =>
       prevSelected.includes(categoryId)
         ? prevSelected.filter((id) => id !== categoryId)
@@ -96,6 +87,8 @@ function Post() {
           setImages={setImages}
           handleSubmit={handleSubmit}
           isLoading={isLoading}
+          activeCat={activeCat} // Pass activeCat as a prop
+          setActiveCat={setActiveCat} // Pass setActiveCat as a prop
         />
         </Paper>
       </Container>
@@ -104,3 +97,7 @@ function Post() {
 }
 
 export default Post;
+
+
+
+

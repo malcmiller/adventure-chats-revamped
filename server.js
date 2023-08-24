@@ -2,14 +2,12 @@ const express = require("express");
 const path = require("path");
 const favicon = require("serve-favicon");
 const logger = require("morgan");
-const cors = require("cors");
 // Always require and configure near the top
 require("dotenv").config();
 // Connect to the database
 require("./config/database");
 
 const app = express();
-
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -41,23 +39,40 @@ app.use(require("./config/checkToken"));
 //       .json({ error: "An error occurred while processing the request" });
 //   }
 // });
+// app.post("/upload", uploadImage.array("file"), async (req, res, next) => {
+//   try {
+//     req.files.forEach(async (file) => {
+//       await Image.create({
+//         name: file.originalname,
+//         url: file.location,
+//       });
+//     });
+
+//     res.json({ status: "success" });
+//   } catch (error) {
+//     // Handle the error here, you can send an error response or log it.
+//     console.error("Error occurred:", error);
+//     res
+//       .status(500)
+//       .json({ error: "An error occurred while processing the request" });
+//   }
+// });
+
+// API routes should be defined before the "catch all" route
 app.use("/api/images", require("./routes/api/images"));
-
-const port = process.env.PORT || 3001;
-
-// Put API routes here, before the "catch all" route
 app.use("/api/users", require("./routes/api/users"));
 app.use('/api/visits', require('./routes/api/visits'));
-app.use('/api/chat', require('./routes/api/chat'));
-
-
-
+app.use("/api/visits", require("./routes/api/profiles"));
+app.use("/api/chat", require("./routes/api/chat"));
+app.use("/api/categories", require("./routes/api/categories"));
 
 // The following "catch all" route (note the *) is necessary
 // to return the index.html on all non-AJAX/API requests
 app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
+
+const port = process.env.PORT || 3001;
 
 const server = app.listen(port, function () {
   console.log(`Express app running on port ${port}`);

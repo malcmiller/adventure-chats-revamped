@@ -5,7 +5,7 @@ const ensureLoggedIn = require("../../config/ensureLoggedIn");
 const { uploadImage } = require("../../config/uploadImage");
 
 router.post(
-  "/upload/:postId",
+  "/upload/:folder/:id",
   // ensureLoggedIn,
   uploadImage.array("file"),
   imagesCtrl.uploadImage

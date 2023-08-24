@@ -10,6 +10,9 @@ async function addChatMessage(req, res) {
   res.status(201).json(message);
 }
 
+
+
+
 module.exports = {
   getAllChatMessages,
   addChatMessage

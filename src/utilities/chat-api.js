@@ -8,3 +8,4 @@ export function getAllChatMessages() {
 export function createChatMessage(chatMessage) {
   return sendRequest(BASE_URL, 'POST', chatMessage);
 }
+
