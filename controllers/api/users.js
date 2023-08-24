@@ -15,30 +15,27 @@ function checkToken(req, res) {
 }
 
 async function create(req, res) {
-  await User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (user) {
-        throw new Error("Account already exists");
-      } else if (!process.env.SECRET) {
-        throw new Error("no SECRET in .env file");
-      } else {
-        Profile.create(req.body).then((newProfile) => {
-          req.body.profile = newProfile._id;
-          User.create(req.body)
-            .then((user) => {
-              const token = createJWT(user);
-              res.status(200).json(token);
-            })
-            .catch((err) => {
-              Profile.findByIdAndDelete(newProfile._id);
-              res.status(500).json({ err: err.errmsg });
-            });
+  const user = await User.findOne({ email: req.body.email });
+  const profile = await Profile.findOne({ username: req.body.username });
+
+  if (user) {
+    res.status(500).json({ error: "Email already in use." });
+  } else if (profile) {
+    res.status(500).json({ error: "Username not available." });
+  } else {
+    Profile.create(req.body).then((newProfile) => {
+      req.body.profile = newProfile._id;
+      User.create(req.body)
+        .then((user) => {
+          const token = createJWT(user);
+          res.status(200).json(token);
+        })
+        .catch((err) => {
+          Profile.findByIdAndDelete(newProfile._id);
+          res.status(500).json({ err: err.errmsg });
         });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json(err);
     });
+  }
 }
 
 async function login(req, res) {

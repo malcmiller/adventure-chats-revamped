@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../../utilities/users-service";
+import PlacesAutocomplete from "../PlacesAutocomplete/PlacesAutocomplete";
 import {
   Box,
   Grid,
@@ -11,6 +12,7 @@ import {
   OutlinedInput,
   InputAdornment,
   IconButton,
+  Alert,
 } from "@mui/material/";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -44,15 +46,24 @@ const SignUpForm = (props) => {
     username: "",
     firstName: "",
     lastName: "",
+    googlePlaceId: "",
+    name: "",
     email: "",
     password: "",
     passwordConf: "",
+  });
+
+  const [locationData, setLocationData] = useState({
+    googlePlaceId: "",
+    name: "",
   });
 
   const handleChange = (e) => {
     updateMessage("");
     setFormData({
       ...formData,
+      googlePlaceId: locationData.googlePlaceId,
+      name: locationData.name,
       [e.target.name]: e.target.value,
     });
   };
@@ -64,7 +75,7 @@ const SignUpForm = (props) => {
       props.setUser(user);
       navigate(-1);
     } catch (err) {
-      updateMessage(err.message);
+      updateMessage(err.response.data.error);
     }
   };
 
@@ -119,6 +130,12 @@ const SignUpForm = (props) => {
         onChange={handleChange}
         sx={{ m: 1, width: "30ch" }}
       />
+      <Grid sx={{ m: 1 }}>
+        <PlacesAutocomplete
+          locationData={locationData}
+          setLocationData={setLocationData}
+        />
+      </Grid>
       <Grid>
         <TextField
           fullWidth
@@ -201,7 +218,14 @@ const SignUpForm = (props) => {
           <Button sx={{ m: 1, width: "35ch" }}>Cancel</Button>
         </Link>
       </div>
-      <Grid>{message}</Grid>
+
+      {message != "" ? (
+        <Alert severity="error" sx={{ m: 1, width: "70ch" }}>
+          {message}
+        </Alert>
+      ) : (
+        ""
+      )}
     </Box>
   );
 };
