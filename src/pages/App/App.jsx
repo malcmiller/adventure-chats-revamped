@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { getUser, getProfile } from "../../utilities/users-service";
+import { getUser,  } from "../../utilities/users-service";
 import "./App.css";
 import HomePage from "../HomePage/HomePage";
 import AuthPage from '../AuthPage/AuthPage';
