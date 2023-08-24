@@ -60,8 +60,8 @@ const SignUpForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signUp(formData);
-      props.setUser();
+      const user = await signUp(formData);
+      props.setUser(user);
       navigate(-1);
     } catch (err) {
       updateMessage(err.message);
