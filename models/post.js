@@ -19,16 +19,18 @@ const commentSchema = new Schema(
   }
 );
 
+const locationSchema = new Schema({
+  googlePlaceId: String,
+  placeName: String,
+});
+
 const postSchema = new Schema(
   {
     title: {
       type: String,
       required: true,
     },
-    location: {
-      type: Schema.Types.ObjectId,
-      ref: "Location",
-    },
+    location: locationSchema,
     categories: [
       {
         type: Schema.Types.ObjectId,

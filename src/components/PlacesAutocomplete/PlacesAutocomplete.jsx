@@ -22,7 +22,7 @@ function loadScript(src, position, id) {
 
 const autocompleteService = { current: null };
 
-export default function GoogleMaps({ locationData, setLocationData }) {
+export default function PlacesAutocomplete({ locationData, setLocationData }) {
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
@@ -91,6 +91,11 @@ export default function GoogleMaps({ locationData, setLocationData }) {
     }
   }, [value, locationData]);
 
+  useEffect(() => {
+    if (!value) {
+      setLocationData({ googlePlaceId: "", name: "" });
+    }
+  }, [value, setLocationData]);
   return (
     <Autocomplete
       id="google-map-demo"

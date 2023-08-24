@@ -65,6 +65,7 @@ app.use("/api/visits", require("./routes/api/profiles"));
 app.use("/api/visits", require("./routes/api/visits"));
 
 app.use("/api/categories", require("./routes/api/categories"));
+app.use("/api/posts", require("./routes/api/posts"));
 
 // The following "catch all" route (note the *) is necessary
 // to return the index.html on all non-AJAX/API requests
