@@ -91,11 +91,6 @@ export default function PlacesAutocomplete({ locationData, setLocationData }) {
     }
   }, [value, locationData]);
 
-  useEffect(() => {
-    if (!value) {
-      setLocationData({ googlePlaceId: "", name: "" });
-    }
-  }, [value, setLocationData]);
   return (
     <Autocomplete
       id="google-map-demo"
