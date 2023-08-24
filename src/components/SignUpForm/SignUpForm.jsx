@@ -63,7 +63,7 @@ const SignUpForm = (props) => {
     setFormData({
       ...formData,
       googlePlaceId: locationData.googlePlaceId,
-      placeName: locationData.name,
+      placeName: locationData.placeName,
       [e.target.name]: e.target.value,
     });
   };

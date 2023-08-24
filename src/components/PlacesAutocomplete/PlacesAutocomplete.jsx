@@ -31,7 +31,7 @@ export default function PlacesAutocomplete({ locationData, setLocationData }) {
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
       loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&libraries=places`,
+        `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&libraries=places&callback=Function.prototype`,
         document.querySelector("head"),
         "google-maps"
       );
@@ -87,7 +87,7 @@ export default function PlacesAutocomplete({ locationData, setLocationData }) {
 
   useEffect(() => {
     if (!value) {
-      locationData = { googlePlaceId: "", name: "" };
+      locationData = { googlePlaceId: "", placeName: "" };
     }
   }, [value, locationData]);
 
@@ -116,7 +116,7 @@ export default function PlacesAutocomplete({ locationData, setLocationData }) {
         if (newValue) {
           setLocationData({
             googlePlaceId: newValue.place_id,
-            name: newValue.description,
+            placeName: newValue.description,
           });
         }
       }}
