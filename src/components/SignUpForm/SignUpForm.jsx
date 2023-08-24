@@ -219,7 +219,7 @@ const SignUpForm = (props) => {
         </Link>
       </div>
 
-      {message !== "" ? (
+      {message != "" ? (
         <Alert severity="error" sx={{ m: 1, width: "70ch" }}>
           {message}
         </Alert>
