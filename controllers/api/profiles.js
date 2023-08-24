@@ -1,4 +1,10 @@
-import { Profile } from "../models/profile.js";
+const Profile = require("../../models/profile");
+
+module.exports = {
+  index,
+  update,
+  show,
+};
 
 function index(req, res) {
   Profile.find({})
@@ -7,8 +13,7 @@ function index(req, res) {
       res.status(500).json(err);
     });
 }
-
-const update = async (req, res) => {
+async function update(req, res) {
   try {
     const updatedProfile = await Profile.findByIdAndUpdate(
       req.params.id,
@@ -19,9 +24,9 @@ const update = async (req, res) => {
   } catch (error) {
     return res.status(500).json(error);
   }
-};
+}
 
-const show = async (req, res) => {
+async function show(req, res) {
   try {
     const profile = await Profile.findById(req.params.id);
     // .populate("joined_groups")
@@ -33,6 +38,4 @@ const show = async (req, res) => {
   } catch (err) {
     return res.status(500).json(err);
   }
-};
-
-export { index, update, show };
+}

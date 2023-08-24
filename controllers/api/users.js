@@ -15,9 +15,9 @@ function checkToken(req, res) {
 }
 
 async function create(req, res) {
-  await Profile.findOne({ email: req.body.email })
-    .then((profile) => {
-      if (profile) {
+  await User.findOne({ email: req.body.email })
+    .then((user) => {
+      if (user) {
         throw new Error("Account already exists");
       } else if (!process.env.SECRET) {
         throw new Error("no SECRET in .env file");
