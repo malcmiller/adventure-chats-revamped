@@ -31,26 +31,16 @@ async function create(req, res) {
 
     if (!location) {
       const newLocation = await Location.create(req.body);
-      console.log(newLocation._id);
       req.body.homeBase = newLocation._id;
     } else {
       req.body.homeBase = location._id;
     }
-
     const newProfile = await Profile.create(req.body);
     req.body.profile = newProfile._id;
-    const newUser = await User.create(req.body);
+    let newUser = await User.create(req.body);
+    newUser = await newUser.populate("profile");
 
-    const token = await createJWT({
-      email: newUser.email,
-      profileId: newUser.profile,
-      useUsername: newProfile.useUsername,
-      username: newProfile.username,
-      firstName: newProfile.firstName,
-      lastName: newProfile.lastName,
-      profilePic: newProfile.profilePic,
-    });
-
+    const token = createJWT(newUser);
     res.status(200).json(token);
   } catch (err) {
     res.status(500).json({ error: "Error creating your user." });
@@ -59,21 +49,15 @@ async function create(req, res) {
 
 async function login(req, res) {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email }).populate(
+      "profile"
+    );
+
     if (!user) throw new Error();
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) throw new Error();
     const profile = await Profile.findOne({ _id: user.profile });
-    console.log(profile);
-    const token = createJWT({
-      email: user.email,
-      profileId: user.profile,
-      useUsername: profile.useUsername,
-      username: profile.username,
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      profilePic: profile.profilePic,
-    });
+    const token = createJWT(user);
 
     res.json(token);
   } catch (err) {

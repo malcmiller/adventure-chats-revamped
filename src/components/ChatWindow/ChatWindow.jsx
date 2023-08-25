@@ -108,11 +108,8 @@ export default function ChatWindow({ user }) {
   const [message, setMessage] = useState("");
   const [chatVisible, setChatVisible] = useState(false);
 
-  const chatName = user
-    ? user.useUsername
-      ? user.username
-      : user.firstName + " " + user.lastName
-    : "";
+  const chatName = 
+  user.profile.username || `${user.profile.firstName} ${user.profile.lastName}`
 
   function sendMessage() {
     const userMessage = {
