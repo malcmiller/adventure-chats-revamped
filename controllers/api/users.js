@@ -19,27 +19,39 @@ async function create(req, res) {
   try {
     const user = await User.findOne({ email: req.body.email });
     const profile = await Profile.findOne({ username: req.body.username });
+    const location = await Location.findOne({
+      googlePlaceId: req.body.googlePlaceId,
+    });
 
     if (user) {
       res.status(500).json({ error: "Email already in use." });
     } else if (profile) {
       res.status(500).json({ error: "Username not available." });
-    } else {
-      const newLocation = await Location.create(req.body);
-      req.body.homeBase = newLocation._id;
-      const newProfile = await Profile.create(req.body);
-      req.body.profile = newProfile._id;
-      const newUser = await User.create(req.body);
-      const token = await createJWT({
-        email: newUser.email,
-        useUsername: newProfile.useUsername,
-        username: newProfile.username,
-        firstName: newProfile.firstName,
-        lastName: newProfile.lastName,
-        profilePic: newProfile.profilePic,
-      });
-      res.status(200).json(token);
     }
+
+    if (!location) {
+      const newLocation = await Location.create(req.body);
+      console.log(newLocation._id);
+      req.body.homeBase = newLocation._id;
+    } else {
+      req.body.homeBase = location._id;
+    }
+
+    const newProfile = await Profile.create(req.body);
+    req.body.profile = newProfile._id;
+    const newUser = await User.create(req.body);
+
+    const token = await createJWT({
+      email: newUser.email,
+      profileId: newUser.profile,
+      useUsername: newProfile.useUsername,
+      username: newProfile.username,
+      firstName: newProfile.firstName,
+      lastName: newProfile.lastName,
+      profilePic: newProfile.profilePic,
+    });
+
+    res.status(200).json(token);
   } catch (err) {
     res.status(500).json({ error: "Error creating your user." });
   }
@@ -55,6 +67,7 @@ async function login(req, res) {
     console.log(profile);
     const token = createJWT({
       email: user.email,
+      profileId: user.profile,
       useUsername: profile.useUsername,
       username: profile.username,
       firstName: profile.firstName,

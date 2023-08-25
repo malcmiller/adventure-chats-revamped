@@ -21,48 +21,11 @@ app.use(express.static(path.join(__dirname, "build")));
 // assign the user object from the JWT to req.user
 app.use(require("./config/checkToken"));
 
-// app.post("/upload", uploadImage.array("file"), async (req, res, next) => {
-//   try {
-//     req.files.forEach(async (file) => {
-//       await Image.create({
-//         name: file.originalname,
-//         url: file.location,
-//       });
-//     });
-
-//     res.json({ status: "success" });
-//   } catch (error) {
-//     // Handle the error here, you can send an error response or log it.
-//     console.error("Error occurred:", error);
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while processing the request" });
-//   }
-// });
-// app.post("/upload", uploadImage.array("file"), async (req, res, next) => {
-//   try {
-//     req.files.forEach(async (file) => {
-//       await Image.create({
-//         name: file.originalname,
-//         url: file.location,
-//       });
-//     });
-
-//     res.json({ status: "success" });
-//   } catch (error) {
-//     // Handle the error here, you can send an error response or log it.
-//     console.error("Error occurred:", error);
-//     res
-//       .status(500)
-//       .json({ error: "An error occurred while processing the request" });
-//   }
-// });
-
 // API routes should be defined before the "catch all" route
 app.use("/api/images", require("./routes/api/images"));
 app.use("/api/users", require("./routes/api/users"));
-app.use('/api/visits', require('./routes/api/visits'));
-app.use("/api/visits", require("./routes/api/profiles"));
+app.use("/api/visits", require("./routes/api/visits"));
+app.use("/api/profiles", require("./routes/api/profiles"));
 app.use("/api/chat", require("./routes/api/chat"));
 app.use("/api/categories", require("./routes/api/categories"));
 app.use("/api/posts", require("./routes/api/posts"));
@@ -83,7 +46,7 @@ const server = app.listen(port, function () {
 const io = require("./config/socket").init(server);
 
 io.on("connection", (socket) => {
-  console.log(`Socket connected: ${socket.id}`)
+  console.log(`Socket connected: ${socket.id}`);
   socket.on("send_message", (msg) => {
     socket.broadcast.emit("receive_message", msg);
   });

@@ -44,7 +44,7 @@ function sanitizeFile(file, cb) {
   if (isAllowedExt && isAllowedMimeType) {
     return cb(null, true); // no errors
   } else {
-    // pass error msg to callback, which can be displaye in frontend
+    // pass error msg to callback, which can be displayed in frontend
     cb("Error: File type not allowed!");
   }
 }

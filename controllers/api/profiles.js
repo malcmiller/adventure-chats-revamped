@@ -20,6 +20,7 @@ async function update(req, res) {
       req.body,
       { new: true }
     );
+    const updatedLocation = await Location.findByIdAndUpdate();
     return res.status(200).json(updatedProfile);
   } catch (error) {
     return res.status(500).json(error);
@@ -28,15 +29,12 @@ async function update(req, res) {
 
 async function show(req, res) {
   try {
-    const profile = await Profile.findById(req.params.id);
-    // .populate("joined_groups")
-    // .populate("favorited_posts")
-    // .populate("registered_events")
-    // .populate("groups")
-    // .populate("posts");
+    const profile = await Profile.findById(req.params.id)
+      .populate("profilePics")
+      .populate("homeBase");
+    console.log(profile);
     return res.status(200).json(profile);
   } catch (err) {
     return res.status(500).json(err);
   }
 }
-
