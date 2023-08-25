@@ -29,8 +29,12 @@ async function create(req, res) {
       req.body.homeBase = newLocation._id;
       const newProfile = await Profile.create(req.body);
       req.body.profile = newProfile._id;
-      const newUser = await User.create(req.body);
-      const token = await createJWT(newUser);
+
+
+      let newUser = await User.create(req.body);
+      newUser = await newUser.populate("profile");
+
+      const token = createJWT(newUser);
       res.status(200).json(token);
     }
   } catch (err) {
