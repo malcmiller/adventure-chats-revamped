@@ -29,9 +29,13 @@ export default function EditProfileSettingsForm({ user }) {
 
   const fetchProfile = async () => {
     try {
-      const response = await getById(user.profileId); // Replace with your API endpoint
+      const response = await getById(user.profile._id); // Replace with your API endpoint
       console.log(response.data);
       setFormData(response.data);
+      setLocationData({
+        googlePlaceId: response.data.homeBase.googlePlaceId,
+        placeName: response.data.homeBase.placeName,
+      });
       setSlidersState(response.data);
       // console.log(response.data);
     } catch (error) {
