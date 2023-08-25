@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CreatePostForm from "../CreatePostForm/CreatePostForm";
 import { Container, Paper } from "@mui/material";
 import { getAll, create } from "../../utilities/posts-api";
+import PostList from "../PostList/PostList"; // Adjust the path as needed
 
 function PostContainer() {
   const [title, setTitle] = useState("");
@@ -80,9 +81,9 @@ function PostContainer() {
             addPost={addPost}
             activeCat={activeCat}
             setActiveCat={setActiveCat}
-            posts={posts}
           />
         </Paper>
+        <PostList posts={posts} />
       </Container>
     </div>
   );
