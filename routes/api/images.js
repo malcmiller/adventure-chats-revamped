@@ -6,11 +6,11 @@ const { uploadImage } = require("../../config/uploadImage");
 
 router.post(
   "/upload/:folder/:id",
-  // ensureLoggedIn,
+  ensureLoggedIn,
   uploadImage.array("file"),
   imagesCtrl.uploadImage
 );
 
-router.delete("/:id", imagesCtrl.deleteImage);
+router.delete("/:id", ensureLoggedIn, imagesCtrl.deleteImage);
 
 module.exports = router;

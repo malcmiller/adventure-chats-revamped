@@ -6,7 +6,12 @@ const profileSchema = new Schema(
     username: { type: String, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    profilePic: String,
+    profilePics: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Image",
+      },
+    ],
     homeBase: {
       type: Schema.Types.ObjectId,
       ref: "Location",

@@ -82,8 +82,8 @@ export default function NavBar({ user, setUser }) {
     setAnchorEl(null);
   };
 
-  const navigateAccount = () => {
-    navigate("/account");
+  const navigateSettings = () => {
+    navigate("/settings");
   };
 
   const menuId = "primary-search-account-menu";
@@ -108,11 +108,11 @@ export default function NavBar({ user, setUser }) {
           <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
           <MenuItem
             onClick={() => {
-              navigateAccount();
+              navigateSettings();
               handleMenuClose();
             }}
           >
-            My account
+            Settings
           </MenuItem>
           <MenuItem
             onClick={() => {
