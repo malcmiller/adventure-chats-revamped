@@ -1,27 +1,34 @@
-const Post = require("../../models/Post");
+const Post = require("../../models/post");
+const Location = require("../../models/location");
+
+module.exports = {
+  createPost,
+  index,
+  showPost,
+  deletePost,
+};
 
 async function createPost(req, res) {
-  try {
-    const { title, content, location, categories, images } = req.body;
-    console.log(images);
-    const newPost = new Post({
-      title,
-      content,
-      location,
-      categories,
-      images,
-    });
-    await newPost.save();
-    res.status(201).json({ message: "Post created successfully" });
-  } catch (error) {
-    console.error("Error creating post:", error);
-    res.status(500).json({ error: "Internal server error" });
+  console.log(req.body);
+  const location = await Location.findOne({
+    googlePlaceId: req.body.googlePlaceId,
+  });
+  if (!location) {
+    const newLocation = await Location.create(req.body.googleLocation);
+    console.log(newLocation._id);
+    req.body.location = newLocation._id;
+  } else {
+    req.body.location = location._id;
   }
+  console.log(req.body);
+  const post = await Post.create(req.body);
+  console.log(post);
+  res.status(201).json(post);
 }
 
 async function index(req, res) {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate("categories").populate("location");
     res.status(200).json(posts);
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -31,7 +38,9 @@ async function index(req, res) {
 
 async function showPost(req, res) {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id)
+      .populate("categories")
+      .populate("location");
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
@@ -54,10 +63,3 @@ async function deletePost(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
-
-module.exports = {
-  createPost,
-  index,
-  showPost,
-  deletePost,
-};
