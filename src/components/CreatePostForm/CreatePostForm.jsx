@@ -15,17 +15,15 @@ function CreatePostForm({
   setTitle,
   content,
   setContent,
-  handleSubmit,
-  isLoading,
-  selectedCategories,
-  handleCategoryChange,
+  addPost,
+  setActiveCat,
+  activeCat,
   locationData,
   setLocationData,
-  images,
-  setImages,
 }) {
+  console.log(activeCat);
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={addPost}>
       <Typography variant="h3" className="post-title" align="center">
         Create a New Post
       </Typography>
@@ -49,10 +47,7 @@ function CreatePostForm({
 
         <label className="MuiFormLabel-root MuiInputLabel-root form-label"></label>
         <Container className="MuiContainer-root form-categories">
-          <CategoryCheckbox
-            activeCat={selectedCategories}
-            setActiveCat={handleCategoryChange}
-          />
+          <CategoryCheckbox activeCat={activeCat} setActiveCat={setActiveCat} />
         </Container>
         <Box mt={2} mb={2}>
           <TextField
@@ -66,19 +61,10 @@ function CreatePostForm({
             className="form-input"
           />
         </Box>
-        <input
-          type="file"
-          onChange={(e) => setImages(e.target.files)}
-          multiple
-        />
-        <Box pb={2} className="MuiBox-root form-button-container">
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={isLoading}
-            className="form-button"
-          >
-            {isLoading ? "Creating..." : "Create Post"}
+
+        <Box pb={2}>
+          <Button type="submit" variant="contained" className="form-button">
+            Submit
           </Button>
         </Box>
       </Container>
