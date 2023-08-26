@@ -79,8 +79,12 @@ export default function EditProfileSettingsForm({ user }) {
     updateMessage("");
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
-      [e.target.name]: e.target.checked,
+      [e.target.name]:
+        e.target.name === "useUsername" ||
+        e.target.name === "isMessageable" ||
+        e.target.name === "isSearchable"
+          ? e.target.checked
+          : e.target.value,
     });
   };
 
