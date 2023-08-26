@@ -1,6 +1,6 @@
 import PlacesAutocomplete from "../PlacesAutocomplete/PlacesAutocomplete";
 import ImageUpload from "../ImageUpload/ImageUpload";
-import { getById, create } from "../../utilities/profiles-api";
+import { getById, update } from "../../utilities/profiles-api";
 
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,36 +12,14 @@ import {
   Alert,
   FormControlLabel,
   Switch,
+  Typography,
 } from "@mui/material/";
 
 export default function EditProfileSettingsForm({ user }) {
   const navigate = useNavigate();
-
   const [message, setMessage] = useState([""]);
-
-  const updateMessage = (msg) => {
-    setMessage(msg);
-  };
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    try {
-      const response = await getById(user.profile._id); // Replace with your API endpoint
-      console.log(response.data);
-      setFormData(response.data);
-      setLocationData({
-        googlePlaceId: response.data.homeBase.googlePlaceId,
-        placeName: response.data.homeBase.placeName,
-      });
-      setSlidersState(response.data);
-      // console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching visits:", error);
-    }
-  };
+  const [profilePicList, setProfilePicList] = useState([]);
+  const [hasLocation, setHasLocation] = useState(true);
 
   const [formData, setFormData] = useState({
     profilePic: [],
@@ -57,6 +35,37 @@ export default function EditProfileSettingsForm({ user }) {
     isSearchable: true,
   });
 
+  const [locationData, setLocationData] = useState({
+    googlePlaceId: "",
+    placeName: "",
+  });
+
+  const updateMessage = (msg) => {
+    setMessage(msg);
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const response = await getById(user.profile._id); // Replace with your API endpoint
+      console.log(response.data);
+
+      setProfilePicList(response.data.profilePics.reverse());
+
+      setFormData(response.data);
+      setLocationData({
+        googlePlaceId: response.data.homeBase.googlePlaceId,
+        placeName: response.data.homeBase.placeName,
+      });
+      setSlidersState(response.data);
+    } catch (error) {
+      console.error("Error fetching profile: ", error);
+    }
+  };
+
   const handleSliderChange = (event) => {
     setSlidersState({
       ...slidersState,
@@ -64,40 +73,42 @@ export default function EditProfileSettingsForm({ user }) {
     });
   };
 
-  const [locationData, setLocationData] = useState({
-    googlePlaceId: "",
-    placeName: "",
-  });
-
-  useEffect(() => {
-    // const databaseData = fetchFromDatabase();
-
-    // Update the state with the database values
-    setFormData({
-      profilePic: [],
-      firstName: "",
-      lastName: "",
-      googlePlaceId: "",
-      placeName: "",
-    });
-  }, []);
-
   const handleChange = (e) => {
     updateMessage("");
     setFormData({
       ...formData,
-      googlePlaceId: locationData.googlePlaceId,
-      placeName: locationData.placeName,
       [e.target.name]: e.target.value,
     });
   };
 
+  useEffect(() => {
+    // Check if locationData has changed
+    if (
+      locationData.googlePlaceId !== formData.googlePlaceId ||
+      locationData.placeName !== formData.placeName
+    ) {
+      setFormData({
+        ...formData,
+        googlePlaceId: locationData.googlePlaceId,
+        placeName: locationData.placeName,
+      });
+    }
+  }, [locationData]);
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      googlePlaceId: locationData.googlePlaceId,
+      placeName: locationData.placeName,
+      newProfilePicList: profilePicList,
+    });
+  }, [profilePicList]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const user = await signUp(formData);
-      // props.setUser(user);
-      // navigate(-1);
+      const profile = await update(user.profile._id, formData);
+      console.log(profile);
     } catch (err) {
       updateMessage(err.response.data.error);
     }
@@ -111,13 +122,18 @@ export default function EditProfileSettingsForm({ user }) {
 
   return (
     <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
+      <Typography sx={{ m: 1 }} variant="button" display="block" gutterBottom>
+        Profile Picture Upload
+      </Typography>
       <ImageUpload
         imageFor={"profile"}
-        id={user.profileId}
+        id={user.profile._id}
+        profilePicList={profilePicList}
+        setProfilePicList={setProfilePicList}
         getImageList={(imageList) => {
           setFormData({
             ...formData,
-            profilePic: imageList.map((image) => image._id),
+            profilePicsNew: imageList.map((image) => image._id),
           });
         }}
       />
@@ -147,6 +163,8 @@ export default function EditProfileSettingsForm({ user }) {
         <PlacesAutocomplete
           locationData={locationData}
           setLocationData={setLocationData}
+          hasLocation={hasLocation}
+          setHasLocation={setHasLocation}
         />
       </Grid>
       <Grid sx={{ m: 1 }}>

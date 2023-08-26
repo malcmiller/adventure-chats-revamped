@@ -22,7 +22,12 @@ function loadScript(src, position, id) {
 
 const autocompleteService = { current: null };
 
-export default function PlacesAutocomplete({ locationData, setLocationData }) {
+export default function PlacesAutocomplete({
+  locationData,
+  setLocationData,
+  hasLocation,
+  setHasLocation,
+}) {
   const [value, setValue] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [options, setOptions] = useState([]);
@@ -87,7 +92,12 @@ export default function PlacesAutocomplete({ locationData, setLocationData }) {
 
   useEffect(() => {
     if (!value) {
-      locationData = { googlePlaceId: "", placeName: "" };
+      if (!value && locationData && hasLocation) {
+        setValue(locationData.placeName);
+      } else {
+        setLocationData({ googlePlaceId: "", placeName: "" });
+        setHasLocation(false);
+      }
     }
   }, [value, locationData]);
 
@@ -113,10 +123,12 @@ export default function PlacesAutocomplete({ locationData, setLocationData }) {
             googlePlaceId: newValue.place_id,
             placeName: newValue.description,
           });
+          setHasLocation(true);
         }
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
+        setHasLocation(false);
       }}
       renderInput={(params) => (
         <TextField {...params} label="Add a location" fullWidth />
