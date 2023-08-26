@@ -24,23 +24,20 @@ function PostList({ posts }) {
         {posts.map((post) => (
           <li key={post._id}>
             <h3>{post.title}</h3>
+            <p>Location: {post.location.placeName}</p>
             <p>{post.content}</p>
-
             <p>
               Categories:{" "}
-              {post.categories.length > 0
-                ? post.categories
-                    .map((categoryId) => {
-                      console.log("Looking for category with ID:", categoryId);
-                      const categoryIdAsString = categoryId.toString(); // Convert ObjectId to string
-                      const category = categories.find(
-                        (cat) => cat._id === categoryIdAsString // Compare as strings
-                      );
-                      console.log("Found category:", category);
-                      return category ? category.name : "Unknown Category";
-                    })
-                    .join(", ")
-                : "No categories"}
+              {post.categories.length > 0 ? (
+                post.categories.map((category, index) => (
+                  <span key={category._id}>
+                    {category.name}
+                    {index < post.categories.length - 1 ? ", " : ""}
+                  </span>
+                ))
+              ) : (
+                <span>No categories</span>
+              )}
             </p>
           </li>
         ))}
