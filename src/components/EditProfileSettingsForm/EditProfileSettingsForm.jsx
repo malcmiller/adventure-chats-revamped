@@ -55,10 +55,8 @@ export default function EditProfileSettingsForm({ user }) {
   const fetchProfile = async () => {
     try {
       const response = await getById(user.profile._id); // Replace with your API endpoint
-      console.log(response.data);
 
       setProfilePics(response.data.profilePics.reverse());
-
       setFormData(response.data);
       setLocationData({
         googlePlaceId: response.data.homeBase.googlePlaceId,
@@ -112,7 +110,6 @@ export default function EditProfileSettingsForm({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData);
       const profile = await update(user.profile._id, formData);
     } catch (err) {
       updateMessage(err.response.data.error);
