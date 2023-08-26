@@ -109,7 +109,7 @@ export default function ImageUpload({
           "Upload failed: Please make sure image extensions are (.png | .jpg | .jpeg | .gif)"
         );
         setMessageSeverity("error");
-        console.error(err);
+        // console.error(err);
       });
   };
 
