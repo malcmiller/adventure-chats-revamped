@@ -10,6 +10,7 @@ import {
   TextField,
   Button,
   Alert,
+  FormGroup,
   FormControlLabel,
   Switch,
   Typography,
@@ -18,7 +19,7 @@ import {
 export default function EditProfileSettingsForm({ user }) {
   const navigate = useNavigate();
   const [message, setMessage] = useState([""]);
-  const [profilePicList, setProfilePicList] = useState([]);
+  const [profilePics, setProfilePics] = useState([]);
   const [hasLocation, setHasLocation] = useState(true);
 
   const [formData, setFormData] = useState({
@@ -27,13 +28,16 @@ export default function EditProfileSettingsForm({ user }) {
     lastName: "",
     googlePlaceId: "",
     placeName: "",
-  });
-
-  const [slidersState, setSlidersState] = useState({
     useUsername: true,
     isMessageable: true,
     isSearchable: true,
   });
+
+  // const [slidersState, setSlidersState] = useState({
+  //   useUsername: true,
+  //   isMessageable: true,
+  //   isSearchable: true,
+  // });
 
   const [locationData, setLocationData] = useState({
     googlePlaceId: "",
@@ -53,31 +57,32 @@ export default function EditProfileSettingsForm({ user }) {
       const response = await getById(user.profile._id); // Replace with your API endpoint
       console.log(response.data);
 
-      setProfilePicList(response.data.profilePics.reverse());
+      setProfilePics(response.data.profilePics.reverse());
 
       setFormData(response.data);
       setLocationData({
         googlePlaceId: response.data.homeBase.googlePlaceId,
         placeName: response.data.homeBase.placeName,
       });
-      setSlidersState(response.data);
+      // setSlidersState(response.data);
     } catch (error) {
       console.error("Error fetching profile: ", error);
     }
   };
 
-  const handleSliderChange = (event) => {
-    setSlidersState({
-      ...slidersState,
-      [event.target.name]: event.target.checked,
-    });
-  };
+  // const handleSliderChange = (event) => {
+  //   setSlidersState({
+  //     ...slidersState,
+  //     [event.target.name]: event.target.checked,
+  //   });
+  // };
 
   const handleChange = (e) => {
     updateMessage("");
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
+      [e.target.name]: e.target.checked,
     });
   };
 
@@ -100,21 +105,22 @@ export default function EditProfileSettingsForm({ user }) {
       ...formData,
       googlePlaceId: locationData.googlePlaceId,
       placeName: locationData.placeName,
-      newProfilePicList: profilePicList,
+      profilePics: profilePics,
     });
-  }, [profilePicList]);
+  }, [profilePics]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(formData);
       const profile = await update(user.profile._id, formData);
-      console.log(profile);
     } catch (err) {
       updateMessage(err.response.data.error);
     }
   };
 
-  const { firstName, lastName } = formData;
+  const { firstName, lastName, useUsername, isMessageable, isSearchable } =
+    formData;
 
   const isFormInvalid = () => {
     return !(firstName && lastName);
@@ -128,8 +134,8 @@ export default function EditProfileSettingsForm({ user }) {
       <ImageUpload
         imageFor={"profile"}
         id={user.profile._id}
-        profilePicList={profilePicList}
-        setProfilePicList={setProfilePicList}
+        profilePics={profilePics}
+        setProfilePics={setProfilePics}
         getImageList={(imageList) => {
           setFormData({
             ...formData,
@@ -167,43 +173,41 @@ export default function EditProfileSettingsForm({ user }) {
           setHasLocation={setHasLocation}
         />
       </Grid>
-      <Grid sx={{ m: 1 }}>
+      <Grid sx={{ m: 1, width: "28ch" }}>
         <FormControlLabel
           control={
             <Switch
-              checked={slidersState.useUsername}
-              onChange={handleSliderChange}
+              checked={useUsername}
+              onChange={handleChange}
               name="useUsername"
             />
           }
           label="Use Username"
         />
-      </Grid>
-      <Grid sx={{ m: 1 }}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={slidersState.isMessageable}
-              onChange={handleSliderChange}
-              name="isMessageable"
-              color="secondary"
-            />
-          }
-          label="Message with others"
-        />
-      </Grid>
-      <Grid sx={{ m: 1 }}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={slidersState.isSearchable}
-              onChange={handleSliderChange}
-              name="isSearchable"
-              color="warning"
-            />
-          }
-          label="Public posts"
-        />
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isMessageable}
+                onChange={handleChange}
+                name="isMessageable"
+                color="secondary"
+              />
+            }
+            label="Message with others"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isSearchable}
+                onChange={handleChange}
+                name="isSearchable"
+                color="warning"
+              />
+            }
+            label="Public posts"
+          />
+        </FormGroup>
       </Grid>
       <div>
         <Button

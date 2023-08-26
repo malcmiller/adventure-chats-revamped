@@ -19,8 +19,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 export default function ImageUpload({
   imageFor /*post || profile*/,
   id,
-  profilePicList,
-  setProfilePicList,
+  profilePics,
+  setProfilePics,
   getImageList,
 }) {
   const [files, setFiles] = useState(null);
@@ -136,14 +136,14 @@ export default function ImageUpload({
         updateImagesAndList(newImages);
         setMessage("Deleted " + res.data.file);
 
-        const profilePicIndex = profilePicList.findIndex(
+        const profilePicIndex = profilePics.findIndex(
           (image) => image._id === imageIdToRemove
         );
 
         if (profilePicIndex !== -1) {
-          const newProfilePicList = [...profilePicList];
-          newProfilePicList.splice(profilePicIndex, 1);
-          setProfilePicList(newProfilePicList);
+          const modifiedProfilePics = [...profilePics];
+          modifiedProfilePics.splice(profilePicIndex, 1);
+          setProfilePics(modifiedProfilePics);
         }
 
         setMessageSeverity("success");
@@ -193,7 +193,7 @@ export default function ImageUpload({
             Newly Uploaded Images
           </Typography>
           <ImageList sx={{ m: 2, width: 500, height: 180 }} cols={4}>
-            {uploadedImages.map((imageUrl, index) => (
+            {uploadedImages.map((image, index) => (
               <ImageListItem key={index}>
                 <Card raised={true}>
                   <CardMedia
@@ -201,7 +201,7 @@ export default function ImageUpload({
                     sx={{
                       objectFit: "contain",
                     }}
-                    image={imageUrl.url}
+                    image={image.url}
                   />
                   <Tooltip title="Delete" placement="right-start">
                     <IconButton
@@ -227,7 +227,7 @@ export default function ImageUpload({
         </>
       )}
 
-      {profilePicList.length > 0 && (
+      {profilePics.length > 0 && (
         <>
           <Typography
             sx={{ m: 1 }}
@@ -238,7 +238,7 @@ export default function ImageUpload({
             Exisiting Images
           </Typography>
           <ImageList sx={{ m: 2, width: 500, height: 180 }} cols={4}>
-            {profilePicList.map((imageUrl, index) => (
+            {profilePics.map((image, index) => (
               <ImageListItem key={index}>
                 <Card raised={true}>
                   <CardMedia
@@ -246,7 +246,7 @@ export default function ImageUpload({
                     sx={{
                       objectFit: "contain",
                     }}
-                    image={imageUrl.url}
+                    image={image.url}
                   />
                   <Tooltip title="Delete" placement="right-start">
                     <IconButton
@@ -259,7 +259,7 @@ export default function ImageUpload({
                       size="small"
                       aria-label="delete"
                       onClick={() =>
-                        handleDelete(index, profilePicList[index]._id)
+                        handleDelete(index, profilePics[index]._id)
                       }
                     >
                       <ClearIcon />

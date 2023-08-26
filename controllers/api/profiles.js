@@ -17,7 +17,6 @@ function index(req, res) {
 
 async function update(req, res) {
   try {
-    console.log(req.body);
     if (req.body.googlePlaceId) {
       const location = await Location.findOne({
         googlePlaceId: req.body.googlePlaceId,
@@ -31,18 +30,17 @@ async function update(req, res) {
     } else {
       req.body.homeBase = null;
     }
-    console.log(req.body.homeBase);
 
-    let updatedProfilePics;
-    const existingProfilePics = req.body.profilePics || [];
-    if (req.body.profilePicsNew) {
-      const newProfilePicIds = req.body.profilePicsNew || [];
+    let updatedProfilePics = [];
 
-      updatedProfilePics = existingProfilePics.concat(newProfilePicIds);
+    if (req.body.profilePicsNew && req.body.profilePicsNew.length > 0) {
+      updatedProfilePics = [...updatedProfilePics, ...req.body.profilePicsNew];
     }
 
-    // logic for when exisiting list of image is being modified
-    req.body.newProfilePicList;
+    if (req.body.profilePics && req.body.profilePics.length > 0) {
+      const profilePicIds = req.body.profilePics.map((pic) => pic._id);
+      updatedProfilePics = [...updatedProfilePics, ...profilePicIds];
+    }
 
     const updatedProfile = await Profile.findByIdAndUpdate(
       req.params.id,
@@ -51,11 +49,16 @@ async function update(req, res) {
         lastName: req.body.lastName,
         homeBase: req.body.homeBase,
         profilePics: updatedProfilePics,
+        useUsername: req.body.useUsername,
+        isMessageable: req.body.isMessageable,
+        isSearchable: req.body.isSearchable,
       },
       { new: true }
     );
+
     return res.status(200).json(updatedProfile);
   } catch (error) {
+    console.log(error);
     return res.status(500).json(error);
   }
 }
