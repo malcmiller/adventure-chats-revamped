@@ -55,10 +55,8 @@ export default function EditProfileSettingsForm({ user }) {
   const fetchProfile = async () => {
     try {
       const response = await getById(user.profile._id); // Replace with your API endpoint
-      console.log(response.data);
 
       setProfilePics(response.data.profilePics.reverse());
-
       setFormData(response.data);
       setLocationData({
         googlePlaceId: response.data.homeBase.googlePlaceId,
@@ -81,8 +79,12 @@ export default function EditProfileSettingsForm({ user }) {
     updateMessage("");
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
-      [e.target.name]: e.target.checked,
+      [e.target.name]:
+        e.target.name === "useUsername" ||
+        e.target.name === "isMessageable" ||
+        e.target.name === "isSearchable"
+          ? e.target.checked
+          : e.target.value,
     });
   };
 
@@ -112,7 +114,6 @@ export default function EditProfileSettingsForm({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData);
       const profile = await update(user.profile._id, formData);
     } catch (err) {
       updateMessage(err.response.data.error);
