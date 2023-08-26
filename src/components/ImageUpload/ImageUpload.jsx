@@ -149,7 +149,8 @@ export default function ImageUpload({
         setMessageSeverity("success");
       })
       .catch((err) => {
-        console.error("Error deleting image:", err);
+        setMessage("Error deleting image: " + err);
+        // console.error("Error deleting image:", err);
         setMessageSeverity("error");
       });
   };

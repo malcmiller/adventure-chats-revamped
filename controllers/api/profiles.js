@@ -58,7 +58,6 @@ async function update(req, res) {
 
     return res.status(200).json(updatedProfile);
   } catch (error) {
-    console.log(error);
     return res.status(500).json(error);
   }
 }
