@@ -1,23 +1,26 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import axiosRequest from "../../utilities/send-request";
 import { MuiFileInput } from "mui-file-input"; // https://viclafouch.github.io/mui-file-input/docs/getting-started/
-import { token } from "morgan";
 import {
   LinearProgress,
   Grid,
   Alert,
   Card,
   CardMedia,
-  CardActions,
-  Button,
+  Typography,
+  Tooltip,
   ImageList,
   ImageListItem,
+  IconButton,
 } from "@mui/material/";
+
+import ClearIcon from "@mui/icons-material/Clear";
 
 export default function ImageUpload({
   imageFor /*post || profile*/,
   id,
+  profilePics,
+  setProfilePics,
   getImageList,
 }) {
   const [files, setFiles] = useState(null);
@@ -96,24 +99,27 @@ export default function ImageUpload({
           url: image.url,
           _id: image._id,
         }));
-        updateImagesAndList([...uploadedImages, ...newImages].reverse());
+        updateImagesAndList([...newImages, ...uploadedImages]);
         setMessage("Upload successful");
         setMessageSeverity("success");
+        setFiles(null);
       })
       .catch((err) => {
         setMessage(
           "Upload failed: Please make sure image extensions are (.png | .jpg | .jpeg | .gif)"
         );
         setMessageSeverity("error");
-        console.error(err);
+        // console.error(err);
       });
   };
 
   const handleDelete = (index, imageIdToRemove) => {
     const newFormData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      if (i !== index) {
-        newFormData.append(`file`, files[i]);
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        if (i !== index) {
+          newFormData.append(`file`, files[i]);
+        }
       }
     }
     setFiles(newFormData);
@@ -129,10 +135,22 @@ export default function ImageUpload({
         newImages.splice(index, 1);
         updateImagesAndList(newImages);
         setMessage("Deleted " + res.data.file);
+
+        const profilePicIndex = profilePics.findIndex(
+          (image) => image._id === imageIdToRemove
+        );
+
+        if (profilePicIndex !== -1) {
+          const modifiedProfilePics = [...profilePics];
+          modifiedProfilePics.splice(profilePicIndex, 1);
+          setProfilePics(modifiedProfilePics);
+        }
+
         setMessageSeverity("success");
       })
       .catch((err) => {
-        console.error("Error deleting image:", err);
+        setMessage("Error deleting image: " + err);
+        // console.error("Error deleting image:", err);
         setMessageSeverity("error");
       });
   };
@@ -166,11 +184,17 @@ export default function ImageUpload({
       </Grid>
 
       {uploadedImages.length > 0 && (
-        <ImageList sx={{ m: 1, width: 500, height: 250 }} cols={4}>
-          {uploadedImages
-            .slice()
-            .reverse()
-            .map((imageUrl, index) => (
+        <>
+          <Typography
+            sx={{ m: 1 }}
+            variant="button"
+            display="block"
+            gutterBottom
+          >
+            Newly Uploaded Images
+          </Typography>
+          <ImageList sx={{ m: 2, width: 500, height: 180 }} cols={4}>
+            {uploadedImages.map((image, index) => (
               <ImageListItem key={index}>
                 <Card raised={true}>
                   <CardMedia
@@ -178,22 +202,75 @@ export default function ImageUpload({
                     sx={{
                       objectFit: "contain",
                     }}
-                    image={imageUrl.url}
+                    image={image.url}
                   />
-                  <CardActions>
-                    <Button
+                  <Tooltip title="Delete" placement="right-start">
+                    <IconButton
+                      sx={{
+                        position: "absolute",
+                        top: "2px",
+                        right: "2px",
+                      }}
+                      color="error"
                       size="small"
+                      aria-label="delete"
                       onClick={() =>
                         handleDelete(index, uploadedImages[index]._id)
                       }
                     >
-                      Delete
-                    </Button>
-                  </CardActions>
+                      <ClearIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Card>
               </ImageListItem>
             ))}
-        </ImageList>
+          </ImageList>
+        </>
+      )}
+
+      {profilePics.length > 0 && (
+        <>
+          <Typography
+            sx={{ m: 1 }}
+            variant="button"
+            display="block"
+            gutterBottom
+          >
+            Exisiting Images
+          </Typography>
+          <ImageList sx={{ m: 2, width: 500, height: 180 }} cols={4}>
+            {profilePics.map((image, index) => (
+              <ImageListItem key={index}>
+                <Card raised={true}>
+                  <CardMedia
+                    component="img"
+                    sx={{
+                      objectFit: "contain",
+                    }}
+                    image={image.url}
+                  />
+                  <Tooltip title="Delete" placement="right-start">
+                    <IconButton
+                      sx={{
+                        position: "absolute",
+                        top: "2px",
+                        right: "2px",
+                      }}
+                      color="error"
+                      size="small"
+                      aria-label="delete"
+                      onClick={() =>
+                        handleDelete(index, profilePics[index]._id)
+                      }
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Card>
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </>
       )}
     </>
   );

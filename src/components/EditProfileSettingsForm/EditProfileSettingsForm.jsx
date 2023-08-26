@@ -1,6 +1,6 @@
 import PlacesAutocomplete from "../PlacesAutocomplete/PlacesAutocomplete";
 import ImageUpload from "../ImageUpload/ImageUpload";
-import { getById, create } from "../../utilities/profiles-api";
+import { getById, update } from "../../utilities/profiles-api";
 
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,14 +10,39 @@ import {
   TextField,
   Button,
   Alert,
+  FormGroup,
   FormControlLabel,
   Switch,
+  Typography,
 } from "@mui/material/";
 
 export default function EditProfileSettingsForm({ user }) {
   const navigate = useNavigate();
-
   const [message, setMessage] = useState([""]);
+  const [profilePics, setProfilePics] = useState([]);
+  const [hasLocation, setHasLocation] = useState(true);
+
+  const [formData, setFormData] = useState({
+    profilePic: [],
+    firstName: "",
+    lastName: "",
+    googlePlaceId: "",
+    placeName: "",
+    useUsername: true,
+    isMessageable: true,
+    isSearchable: true,
+  });
+
+  // const [slidersState, setSlidersState] = useState({
+  //   useUsername: true,
+  //   isMessageable: true,
+  //   isSearchable: true,
+  // });
+
+  const [locationData, setLocationData] = useState({
+    googlePlaceId: "",
+    placeName: "",
+  });
 
   const updateMessage = (msg) => {
     setMessage(msg);
@@ -31,79 +56,71 @@ export default function EditProfileSettingsForm({ user }) {
     try {
       const response = await getById(user.profile._id); // Replace with your API endpoint
       console.log(response.data);
+
+      setProfilePics(response.data.profilePics.reverse());
+
       setFormData(response.data);
       setLocationData({
         googlePlaceId: response.data.homeBase.googlePlaceId,
         placeName: response.data.homeBase.placeName,
       });
-      setSlidersState(response.data);
-      // console.log(response.data);
+      // setSlidersState(response.data);
     } catch (error) {
-      console.error("Error fetching visits:", error);
+      console.error("Error fetching profile: ", error);
     }
   };
 
-  const [formData, setFormData] = useState({
-    profilePic: [],
-    firstName: "",
-    lastName: "",
-    googlePlaceId: "",
-    placeName: "",
-  });
-
-  const [slidersState, setSlidersState] = useState({
-    useUsername: true,
-    isMessageable: true,
-    isSearchable: true,
-  });
-
-  const handleSliderChange = (event) => {
-    setSlidersState({
-      ...slidersState,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  const [locationData, setLocationData] = useState({
-    googlePlaceId: "",
-    placeName: "",
-  });
-
-  useEffect(() => {
-    // const databaseData = fetchFromDatabase();
-
-    // Update the state with the database values
-    setFormData({
-      profilePic: [],
-      firstName: "",
-      lastName: "",
-      googlePlaceId: "",
-      placeName: "",
-    });
-  }, []);
+  // const handleSliderChange = (event) => {
+  //   setSlidersState({
+  //     ...slidersState,
+  //     [event.target.name]: event.target.checked,
+  //   });
+  // };
 
   const handleChange = (e) => {
     updateMessage("");
     setFormData({
       ...formData,
-      googlePlaceId: locationData.googlePlaceId,
-      placeName: locationData.placeName,
       [e.target.name]: e.target.value,
+      [e.target.name]: e.target.checked,
     });
   };
+
+  useEffect(() => {
+    // Check if locationData has changed
+    if (
+      locationData.googlePlaceId !== formData.googlePlaceId ||
+      locationData.placeName !== formData.placeName
+    ) {
+      setFormData({
+        ...formData,
+        googlePlaceId: locationData.googlePlaceId,
+        placeName: locationData.placeName,
+      });
+    }
+  }, [locationData]);
+
+  useEffect(() => {
+    setFormData({
+      ...formData,
+      googlePlaceId: locationData.googlePlaceId,
+      placeName: locationData.placeName,
+      profilePics: profilePics,
+    });
+  }, [profilePics]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const user = await signUp(formData);
-      // props.setUser(user);
-      // navigate(-1);
+      console.log(formData);
+      const profile = await update(user.profile._id, formData);
     } catch (err) {
       updateMessage(err.response.data.error);
     }
   };
 
-  const { firstName, lastName } = formData;
+  const { firstName, lastName, useUsername, isMessageable, isSearchable } =
+    formData;
 
   const isFormInvalid = () => {
     return !(firstName && lastName);
@@ -111,13 +128,18 @@ export default function EditProfileSettingsForm({ user }) {
 
   return (
     <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
+      <Typography sx={{ m: 1 }} variant="button" display="block" gutterBottom>
+        Profile Picture Upload
+      </Typography>
       <ImageUpload
         imageFor={"profile"}
-        id={user.profileId}
+        id={user.profile._id}
+        profilePics={profilePics}
+        setProfilePics={setProfilePics}
         getImageList={(imageList) => {
           setFormData({
             ...formData,
-            profilePic: imageList.map((image) => image._id),
+            profilePicsNew: imageList.map((image) => image._id),
           });
         }}
       />
@@ -147,45 +169,45 @@ export default function EditProfileSettingsForm({ user }) {
         <PlacesAutocomplete
           locationData={locationData}
           setLocationData={setLocationData}
+          hasLocation={hasLocation}
+          setHasLocation={setHasLocation}
         />
       </Grid>
-      <Grid sx={{ m: 1 }}>
+      <Grid sx={{ m: 1, width: "28ch" }}>
         <FormControlLabel
           control={
             <Switch
-              checked={slidersState.useUsername}
-              onChange={handleSliderChange}
+              checked={useUsername}
+              onChange={handleChange}
               name="useUsername"
             />
           }
           label="Use Username"
         />
-      </Grid>
-      <Grid sx={{ m: 1 }}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={slidersState.isMessageable}
-              onChange={handleSliderChange}
-              name="isMessageable"
-              color="secondary"
-            />
-          }
-          label="Message with others"
-        />
-      </Grid>
-      <Grid sx={{ m: 1 }}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={slidersState.isSearchable}
-              onChange={handleSliderChange}
-              name="isSearchable"
-              color="warning"
-            />
-          }
-          label="Public posts"
-        />
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isMessageable}
+                onChange={handleChange}
+                name="isMessageable"
+                color="secondary"
+              />
+            }
+            label="Message with others"
+          />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isSearchable}
+                onChange={handleChange}
+                name="isSearchable"
+                color="warning"
+              />
+            }
+            label="Public posts"
+          />
+        </FormGroup>
       </Grid>
       <div>
         <Button
