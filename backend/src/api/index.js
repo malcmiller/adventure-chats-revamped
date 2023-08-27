@@ -17,7 +17,7 @@ router.use(chatRoutes);
 router.use(imageRoutes);
 router.use(postRoutes);
 router.use(profileRoutes);
-router.use(checkAuthorization, userRoutes);
+router.use(userRoutes);
 router.use(visitRoutes);
 
 module.exports = router;

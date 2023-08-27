@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signUp } from "../../utilities/users-service";
 import PlacesAutocomplete from "../PlacesAutocomplete/PlacesAutocomplete";
 import {
   Box,
@@ -16,11 +15,13 @@ import {
 } from "@mui/material/";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { createUser } from "../../services/userService";
 
 const SignUpForm = (props) => {
   const navigate = useNavigate();
 
   const [message, setMessage] = useState([""]);
+  const [hasLocation, setHasLocation] = useState(false);
 
   const updateMessage = (msg) => {
     setMessage(msg);
@@ -71,7 +72,7 @@ const SignUpForm = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const user = await signUp(formData);
+      const user = await createUser(formData);
       props.setUser(user);
       navigate(-1);
     } catch (err) {
@@ -134,6 +135,7 @@ const SignUpForm = (props) => {
         <PlacesAutocomplete
           locationData={locationData}
           setLocationData={setLocationData}
+          setHasLocation={setHasLocation}
         />
       </Grid>
       <Grid>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import * as usersService from "../../utilities/users-service";
+import { login } from "../../services/userService";
 
 export default function LoginForm({ setUser }) {
   const [credentials, setCredentials] = useState({
@@ -22,7 +22,7 @@ export default function LoginForm({ setUser }) {
       // The promise returned by the signUp service method
       // will resolve to the user object included in the
       // payload of the JSON Web Token (JWT)
-      const user = await usersService.login(credentials);
+      const user = await login(credentials);
       setUser(user);
       navigate(-1);
     } catch {

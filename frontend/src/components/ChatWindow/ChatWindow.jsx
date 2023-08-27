@@ -10,7 +10,6 @@
 
 // const socket = io.connect("http://localhost:3001");
 
-
 // export default function ChatWindow({ user }) {
 //   const [messages, setMessages] = useState([]);
 //   const [message, setMessage] = useState("");
@@ -108,8 +107,7 @@ export default function ChatWindow({ user }) {
   const [message, setMessage] = useState("");
   const [chatVisible, setChatVisible] = useState(false);
 
-  const chatName = 
-  user.profile.username || `${user.profile.firstName} ${user.profile.lastName}`
+  const chatName = user.username || `${user.firstName} ${user.lastName}`;
 
   function sendMessage() {
     const userMessage = {
