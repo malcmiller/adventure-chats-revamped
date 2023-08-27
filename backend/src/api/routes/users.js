@@ -1,8 +1,6 @@
-const express = require("express");
+const router = require("express").Router();
 
 const usersCtrl = require("../controllers/users");
-
-const router = express.Router();
 
 // All paths start with '/api/users'
 

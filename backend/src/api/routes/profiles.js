@@ -1,8 +1,6 @@
-const express = require("express");
+const router = require("express").Router();
 
 const profilesCtrl = require("../controllers/profiles");
-
-const router = express.Router();
 
 router.get("/", profilesCtrl.index);
 router.get("/:id", profilesCtrl.show);

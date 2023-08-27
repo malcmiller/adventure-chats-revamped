@@ -1,8 +1,6 @@
-const express = require("express");
+const router = require("express").Router();
 
 const chatMessageCtrl = require("../controllers/chat");
-
-const router = express.Router();
 
 // GET /api/chat
 router.get("/", chatMessageCtrl.getAllChatMessages);

@@ -1,8 +1,6 @@
-const express = require("express");
+const router = require("express").Router();
 
 const visitsCtrl = require("../controllers/visits");
-
-const router = express.Router();
 
 // GET /api/visits
 router.get("/", visitsCtrl.index);

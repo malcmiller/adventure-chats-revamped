@@ -1,8 +1,6 @@
-const express = require("express");
+const router = require("express").Router();
 
 const postsCtrl = require("../controllers/posts");
-
-const router = express.Router();
 
 router.post("/", postsCtrl.createPost);
 

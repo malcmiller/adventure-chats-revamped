@@ -1,8 +1,6 @@
-const express = require("express");
+const router = require("express").Router();
 
 const categoryCtrl = require("../controllers/categories");
-
-const router = express.Router();
 
 router.get("/", categoryCtrl.index);
 

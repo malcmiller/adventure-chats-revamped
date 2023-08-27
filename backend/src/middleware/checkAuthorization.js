@@ -1,16 +1,22 @@
 const jwt = require("jsonwebtoken");
 
-const NOT_AUTHORIZED_MSG = "User not authorized!";
+const NOT_AUTHORIZED_MSG = "Not authorized!";
 const { SECRET } = process.env;
 
 function checkAuthorization(req, res, next) {
-  const { authorizationToken } = req.get("authorization");
+  const authorizationHeader = req.get("authorization");
 
-  if (!authorizationToken) {
+  if (!authorizationHeader) {
     res.status(401).json({ message: NOT_AUTHORIZED_MSG });
   }
 
-  jwt.verify(authorizationToken, SECRET, (error, decode) => {
+  const { token } = authorizationHeader;
+
+  if (!token) {
+    res.status(401).json({ message: NOT_AUTHORIZED_MSG });
+  }
+
+  jwt.verify(token, SECRET, (error, decode) => {
     if (error) {
       res.status(401).json({ message: NOT_AUTHORIZED_MSG });
     }

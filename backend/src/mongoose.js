@@ -7,10 +7,7 @@ mongoose.connection.on("open", (_ref) => {
 });
 
 mongoose.connection.on("error", (error) => {
-  console.log(
-    `Could not establish connection to mongo server! URL: ${DATABASE_URL}`
-  );
-  return console.error(error);
+  console.error(`Could not establish connection to mongo server! ${error}`);
 });
 
 function openConnection() {
