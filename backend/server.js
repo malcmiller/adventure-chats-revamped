@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 3001;
 
 const app = buildApp();
 
-const server = app.listen(PORT, function () {
+const server = app.listen(PORT, () => {
   console.log(`Express app running on port ${PORT}`);
 });
 

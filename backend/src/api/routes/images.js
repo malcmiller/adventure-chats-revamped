@@ -1,7 +1,7 @@
 const express = require("express");
 
 const imagesCtrl = require("../controllers/images");
-const { uploadImage } = require("../../config/uploadImage");
+const { uploadImage } = require("../../util/uploadImage");
 
 const router = express.Router();
 
