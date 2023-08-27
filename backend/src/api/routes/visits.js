@@ -1,21 +1,22 @@
-const checkAuth = require("../../config/checkAuth");
 const express = require("express");
+
+const visitsCtrl = require("../controllers/visits");
+
 const router = express.Router();
-const visitsCtrl = require("../../controllers/api/visits");
 
 // GET /api/visits
 router.get("/", visitsCtrl.index);
 
 // POST /api/visits
-router.post("/", checkAuth, visitsCtrl.createVisit);
+router.post("/", visitsCtrl.createVisit);
 
 // GET /api/visits/:id
-router.get("/:id", checkAuth, visitsCtrl.showVisit);
+router.get("/:id", visitsCtrl.showVisit);
 
 // PUT /api/visits/:id
-router.put("/:id", checkAuth, visitsCtrl.updateVisit);
+router.put("/:id", visitsCtrl.updateVisit);
 
 // DELETE /api/visits/:id
-router.delete("/:id", checkAuth, visitsCtrl.deleteVisit);
+router.delete("/:id", visitsCtrl.deleteVisit);
 
 module.exports = router;

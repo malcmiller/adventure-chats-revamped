@@ -9,7 +9,7 @@ const server = app.listen(PORT, function () {
 });
 
 // Initialize socket.io
-const io = require("./config/socket").init(server);
+const io = require("./src/config/socket").init(server);
 
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);

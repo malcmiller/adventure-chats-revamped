@@ -1,14 +1,13 @@
 const express = require("express");
 
-const checkAuth = require("../../config/checkAuth");
-const chatMessageCtrl = require("../../controllers/api/chat");
+const chatMessageCtrl = require("../controllers/chat");
 
 const router = express.Router();
 
 // GET /api/chat
-router.get("/", checkAuth, chatMessageCtrl.getAllChatMessages);
+router.get("/", chatMessageCtrl.getAllChatMessages);
 
 // POST /api/chat
-router.post("/", checkAuth, chatMessageCtrl.addChatMessage);
+router.post("/", chatMessageCtrl.addChatMessage);
 
 module.exports = router;

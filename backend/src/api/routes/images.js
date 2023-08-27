@@ -1,16 +1,16 @@
 const express = require("express");
-const router = express.Router();
-const imagesCtrl = require("../../controllers/api/images");
-const ensureLoggedIn = require("../../config/ensureLoggedIn");
+
+const imagesCtrl = require("../controllers/images");
 const { uploadImage } = require("../../config/uploadImage");
+
+const router = express.Router();
 
 router.post(
   "/upload/:folder/:id",
-  ensureLoggedIn,
   uploadImage.array("file"),
   imagesCtrl.uploadImage
 );
 
-router.delete("/:id", ensureLoggedIn, imagesCtrl.deleteImage);
+router.delete("/:id", imagesCtrl.deleteImage);
 
 module.exports = router;

@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const User = require("../../models/user");
-const Profile = require("../../models/profile");
-const Location = require("../../models/location");
+const User = require("../models/user");
+const Profile = require("../models/profile");
+const Location = require("../models/location");
 
 module.exports = {
   create,

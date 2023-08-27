@@ -1,5 +1,5 @@
-const Profile = require("../../models/profile");
-const Location = require("../../models/location");
+const Profile = require("../models/profile");
+const Location = require("../models/location");
 
 module.exports = {
   index,

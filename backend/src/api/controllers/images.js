@@ -1,6 +1,6 @@
 const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
-const User = require("../../models/user");
-const Image = require("../../models/image");
+const User = require("../models/user");
+const Image = require("../models/image");
 
 module.exports = {
   uploadImage,

@@ -25,4 +25,4 @@ function checkAuthorization(req, res, next) {
   next();
 }
 
-exports.checkAuthorization = checkAuthorization;
+module.exports = checkAuthorization;

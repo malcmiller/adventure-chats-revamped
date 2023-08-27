@@ -1,7 +1,8 @@
 const express = require("express");
+
+const profilesCtrl = require("../controllers/profiles");
+
 const router = express.Router();
-const profilesCtrl = require("../../controllers/api/profiles");
-const ensureLoggedIn = require("../../config/ensureLoggedIn");
 
 router.get("/", profilesCtrl.index);
 router.get("/:id", profilesCtrl.show);

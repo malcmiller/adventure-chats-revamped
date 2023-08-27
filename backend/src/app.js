@@ -6,17 +6,17 @@ const checkAuthorization = require("./middleware/checkAuthorization");
 function addMiddleWare(app) {
   app.use(morgan("dev"));
   app.use(express.json());
-  app.use(checkAuthorization());
+  app.use(checkAuthorization);
 }
 
 function addRoutes(app) {
-  app.use("/api/images", require("./routes/api/images"));
-  app.use("/api/users", require("./routes/api/users"));
-  app.use("/api/visits", require("./routes/api/visits"));
-  app.use("/api/profiles", require("./routes/api/profiles"));
-  app.use("/api/chat", require("./routes/api/chat"));
-  app.use("/api/categories", require("./routes/api/categories"));
-  app.use("/api/posts", require("./routes/api/posts"));
+  app.use("/api/images", require("./api/routes/images"));
+  app.use("/api/users", require("./api/routes/users"));
+  app.use("/api/visits", require("./api/routes/visits"));
+  app.use("/api/profiles", require("./api/routes/profiles"));
+  app.use("/api/chat", require("./api/routes/chat"));
+  app.use("/api/categories", require("./api/routes/categories"));
+  app.use("/api/posts", require("./api/routes/posts"));
 
   app.get("/*", function (_req, res) {
     res.status(404).json({ message: "Invalid path given!" });
@@ -32,4 +32,4 @@ function buildApp() {
   return app;
 }
 
-exports.buildApp = buildApp;
+module.exports = buildApp;

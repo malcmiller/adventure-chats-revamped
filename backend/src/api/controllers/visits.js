@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const Visit = require("../../models/visit");
+const Visit = require("../models/visit");
 
 module.exports = {
   index,

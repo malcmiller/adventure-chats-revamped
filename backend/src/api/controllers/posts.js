@@ -1,5 +1,5 @@
-const Post = require("../../models/post");
-const Location = require("../../models/location");
+const Post = require("../models/post");
+const Location = require("../models/location");
 
 module.exports = {
   createPost,

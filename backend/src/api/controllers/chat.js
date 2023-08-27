@@ -1,8 +1,8 @@
-const chatMessage = require('../../models/chatMessage');
+const chatMessage = require("../models/chatMessage");
 
 async function getAllChatMessages(req, res) {
   const messages = await chatMessage.find();
-  res.json(messages)
+  res.json(messages);
 }
 
 async function addChatMessage(req, res) {
@@ -10,10 +10,7 @@ async function addChatMessage(req, res) {
   res.status(201).json(message);
 }
 
-
-
-
 module.exports = {
   getAllChatMessages,
-  addChatMessage
+  addChatMessage,
 };
