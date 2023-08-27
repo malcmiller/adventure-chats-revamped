@@ -16,9 +16,9 @@ function checkToken(req, res) {
 }
 
 async function index(req, res) {
-  const visits = await Visit.find(
-    { user: req.user.id }).sort({ startDate: +1},
-    );
+  const visits = await Visit.find({ user: req.user.id }).sort({
+    startDate: +1,
+  });
   res.json(visits);
 }
 

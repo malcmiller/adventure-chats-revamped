@@ -9,7 +9,6 @@ router.get("/", visitsCtrl.index);
 // POST /api/visits
 router.post("/", checkAuth, visitsCtrl.createVisit);
 
-
 // GET /api/visits/:id
 router.get("/:id", checkAuth, visitsCtrl.showVisit);
 
@@ -18,6 +17,5 @@ router.put("/:id", checkAuth, visitsCtrl.updateVisit);
 
 // DELETE /api/visits/:id
 router.delete("/:id", checkAuth, visitsCtrl.deleteVisit);
-
 
 module.exports = router;
