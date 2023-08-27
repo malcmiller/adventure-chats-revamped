@@ -12,7 +12,9 @@ mongoose.connection.on("error", (error) => {
 
 function openConnection() {
   try {
-    mongoose.connect(DATABASE_URL);
+    mongoose.connect(DATABASE_URL, {
+      authSource: "admin",
+    });
   } catch (error) {
     console.error(error);
   }

@@ -4,7 +4,7 @@ const imagesCtrl = require("../controllers/images");
 const { uploadImage } = require("../../util/uploadImage");
 
 router.post(
-  "/upload/:folder/:id",
+  "/images/upload/:folder/:id",
   uploadImage.array("file"),
   imagesCtrl.uploadImage
 );

@@ -3,18 +3,18 @@ const router = require("express").Router();
 const visitsCtrl = require("../controllers/visits");
 
 // GET /api/visits
-router.get("/", visitsCtrl.index);
+router.get("/visit", visitsCtrl.index);
 
 // POST /api/visits
-router.post("/", visitsCtrl.createVisit);
+router.post("/visit", visitsCtrl.createVisit);
 
 // GET /api/visits/:id
-router.get("/:id", visitsCtrl.showVisit);
+router.get("/visit/:id", visitsCtrl.showVisit);
 
 // PUT /api/visits/:id
-router.put("/:id", visitsCtrl.updateVisit);
+router.put("/visit/:id", visitsCtrl.updateVisit);
 
 // DELETE /api/visits/:id
-router.delete("/:id", visitsCtrl.deleteVisit);
+router.delete("/visit/:id", visitsCtrl.deleteVisit);
 
 module.exports = router;

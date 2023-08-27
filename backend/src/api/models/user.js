@@ -6,6 +6,18 @@ const SALT_ROUNDS = 6;
 
 const userSchema = new Schema(
   {
+    username: {
+      type: String,
+      required: true,
+    },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       unique: true,
@@ -18,14 +30,39 @@ const userSchema = new Schema(
       required: true,
     },
     profile: {
-      type: Schema.Types.ObjectId,
-      ref: "Profile",
+      pictureURLs: [
+        {
+          type: String,
+        },
+      ],
+      homeBase: {
+        googlePlaceId: String,
+        placeName: String,
+      },
+      visits: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Visit",
+        },
+      ],
+      posts: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Post",
+        },
+      ],
+      followers: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Profile",
+        },
+      ],
     },
   },
   {
     timestamps: true,
     toJSON: {
-      transform: function (doc, ret) {
+      transform: function (_doc, ret) {
         delete ret.password;
         return ret;
       },
