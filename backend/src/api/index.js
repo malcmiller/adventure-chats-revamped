@@ -7,7 +7,7 @@ const chatRoutes = require("./routes/chat");
 const imageRoutes = require("./routes/images");
 const postRoutes = require("./routes/posts");
 const profileRoutes = require("./routes/profiles");
-const userRoutes = require("./routes/user");
+const userRoutes = require("./user");
 const visitRoutes = require("./routes/visits");
 
 const router = express.Router();
